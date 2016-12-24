@@ -1,19 +1,18 @@
 class AlienBonus extends Alien {
 
-    static INCREMENT = 0.03;
+    static increment = 0.03;
+    static steps = { init: 1, move: 2, end: 3 };
 
-    score: number;
-    step: string;
-    LastSwitch: number;
+    step: number;
   
     constructor(params: any, game: Game) {
         super(params, game);
 
-        this.vx = typeof params.vx !== 'undefined' ? params.vx : AlienBonus.INCREMENT;
+        this.vx = typeof params.vx !== 'undefined' ? params.vx : AlienBonus.increment;
         this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
-        this.vz = typeof params.vz !== 'undefined' ? params.vz : AlienBonus.INCREMENT;
-        this.LastSwitch = 0;
-        this.step = 'init';
+        this.vz = typeof params.vz !== 'undefined' ? params.vz : AlienBonus.increment;
+        this.lastMeshSwitch = 0;
+        this.step = AlienBonus.steps.init;
         this.mesh = randFromArray(alienData.type[3].model1).clone();
         this.mesh2 = randFromArray(alienData.type[3].model2).clone();
         this.mesh2.visible = false;
@@ -28,15 +27,14 @@ class AlienBonus extends Alien {
         this.mesh2.position.z = typeof params.z !== 'undefined' ? params.z : this.mesh.position.z;
     }
   
-            
     // return false if need to be deleted
     public animate(): boolean {
-        if((Date.now() - this.LastSwitch) > 1000) {  
+        if((Date.now() - this.lastMeshSwitch) > Alien.meshSwitchDelay) {  
           this.switchMesh();
-          this.LastSwitch = Date.now();
+          this.lastMeshSwitch = Date.now();
         }    
         switch(this.step) {
-          case 'init':
+          case AlienBonus.steps.init:
             if(this.mesh.position.z > 0) {
               this.mesh.position.z -= this.vz;
               this.mesh2.position.z -= this.vz;
@@ -44,17 +42,17 @@ class AlienBonus extends Alien {
             else {
               this.mesh.position.z = 0.0;
               this.mesh2.position.z = 0.0;
-              this.step = 'move';
+              this.step = AlienBonus.steps.move;
             }
             break;
-          case 'move':
+          case AlienBonus.steps.move:
             this.mesh.position.x -= this.vx;
             this.mesh2.position.x -= this.vx;
             if(this.mesh.position.x < -10.0) {
-              this.step = 'end';
+              this.step = AlienBonus.steps.end;
             }
             break;
-          case 'end':
+          case AlienBonus.steps.end:
             if(this.mesh.position.z < 10.0) {
               this.mesh.position.z += this.vz;
               this.mesh2.position.z += this.vz;
