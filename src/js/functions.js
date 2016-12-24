@@ -181,10 +181,10 @@ var aliensMaterialsBonus = [
 var alienGeometry = new THREE.BoxGeometry(1, 1, 1);
 var alienData = {
     type: [
-        { model1: [], model2: [] },
-        { model1: [], model2: [] },
-        { model1: [], model2: [] },
-        { model1: [], model2: [] },
+        { model1: [], model2: [], modelMenu: null },
+        { model1: [], model2: [], modelMenu: null },
+        { model1: [], model2: [], modelMenu: null },
+        { model1: [], model2: [], modelMenu: null },
     ]
 };
 // mesh in game
@@ -281,33 +281,6 @@ alienData.type[3].modelMenu = loadModel({
         })],
     axe: 'y',
 });
-var size = 1.5;
-var particleNb = 50;
-var particleSize = 0.4;
-var particles = new THREE.Geometry;
-for (var p = 0; p < particleNb; p++) {
-    var particle = new THREE.Vector3(Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0));
-    particle.velocity = new THREE.Vector3(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5, Math.random() * 1 - 0.5);
-    particles.vertices.push(particle);
-}
-var particleMaterial = new THREE.PointCloudMaterial({ color: 0x85b66c, size: particleSize });
-alienData.type[0].explosion = new THREE.PointCloud(particles, particleMaterial);
-var particles = new THREE.Geometry;
-for (var p = 0; p < particleNb; p++) {
-    var particle = new THREE.Vector3(Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0));
-    particle.velocity = new THREE.Vector3(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5, Math.random() * 1 - 0.5);
-    particles.vertices.push(particle);
-}
-var particleMaterial = new THREE.PointCloudMaterial({ color: 0x3d6686, size: particleSize });
-alienData.type[1].explosion = new THREE.PointCloud(particles, particleMaterial);
-var particles = new THREE.Geometry;
-for (var p = 0; p < particleNb; p++) {
-    var particle = new THREE.Vector3(Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0), Math.random() * size - (size / 2.0));
-    particle.velocity = new THREE.Vector3(Math.random() * 1 - 0.5, Math.random() * 1 - 0.5, Math.random() * 1 - 0.5);
-    particles.vertices.push(particle);
-}
-var particleMaterial = new THREE.PointCloudMaterial({ color: 0xaf72c5, size: particleSize });
-alienData.type[2].explosion = new THREE.PointCloud(particles, particleMaterial);
 /**
  * MISSILE
  **/

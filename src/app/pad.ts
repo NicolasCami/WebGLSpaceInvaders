@@ -114,10 +114,7 @@ class Pad {
     }
 
     public animateResetInit = function() {
-        this.curve = new THREE.QuadraticBezierCurve3();
-        this.curve.v0 = new THREE.Vector3(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z);
-        this.curve.v1 = new THREE.Vector3(this.mesh.position.x / 2, this.mesh.position.y / 2, 3);
-        this.curve.v2 = new THREE.Vector3(0, 0.0, 0.0);
+        this.curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z), new THREE.Vector3(this.mesh.position.x / 2, this.mesh.position.y / 2, 3), new THREE.Vector3(0.0, 0.0, 0.0));
         this.curveProgress = 0.0;
     }
 
