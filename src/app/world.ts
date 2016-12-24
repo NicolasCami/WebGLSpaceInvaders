@@ -1,5 +1,7 @@
 class World {
 
+    static bonusRate = 0.1;
+
     missiles = [];
     lights = [];
     blocks: Block[];
@@ -19,7 +21,7 @@ class World {
     lastAlienBonus: number;
     alienBonusDelay: number;
     invincible: boolean;
-    destructionTimer = Date.now();
+    destructionTimer: number;
     destructionDelay: number;
     earthDestroyed: boolean;
 
@@ -30,7 +32,7 @@ class World {
     deathBeamLoad: THREE.PointLight;
     deathBeam: THREE.PointLight;
     
-    AlienGroup: AlienGroup;
+    alienGroup: AlienGroup;
     pad: Pad;
     game: Game;
 
@@ -51,7 +53,7 @@ class World {
         this.limitY = this.height;
         this.level = 0;
         this.onLevelInit = false;
-        this.AlienGroup = new AlienGroup(game);
+        this.alienGroup = new AlienGroup(game);
         this.LastFire = 0;
         this.lastAlienBonus = 0;
         this.alienBonusDelay = 2000;
@@ -172,22 +174,22 @@ class World {
         switch(this.level) {
           
           case 0:
-            this.AlienGroup.init(5,5,level);
-            for(let i= 0; i < this.AlienGroup.getLength(); i++) {
-              this.AlienGroup.get(i).mesh.position.z = Math.random()*6.0;
-              this.game.scene.add(this.AlienGroup.get(i).mesh);
-              this.game.scene.add(this.AlienGroup.get(i).mesh2);
+            this.alienGroup.init(5,5,level);
+            for(let i= 0; i < this.alienGroup.getLength(); i++) {
+              this.alienGroup.get(i).mesh.position.z = Math.random()*6.0;
+              this.game.scene.add(this.alienGroup.get(i).mesh);
+              this.game.scene.add(this.alienGroup.get(i).mesh2);
             }
 
             this.initBunkers();
             break;
             
           default:
-            this.AlienGroup.init(5,5,level);
-            for(let i= 0; i < this.AlienGroup.getLength(); i++) {
-              this.AlienGroup.get(i).mesh.position.z = Math.random()*6.0;
-              this.game.scene.add(this.AlienGroup.get(i).mesh);
-              this.game.scene.add(this.AlienGroup.get(i).mesh2);
+            this.alienGroup.init(5,5,level);
+            for(let i= 0; i < this.alienGroup.getLength(); i++) {
+              this.alienGroup.get(i).mesh.position.z = Math.random()*6.0;
+              this.game.scene.add(this.alienGroup.get(i).mesh);
+              this.game.scene.add(this.alienGroup.get(i).mesh2);
             }
 
             this.initBunkers();
@@ -214,11 +216,11 @@ class World {
         }
         this.blocks = [];
 
-        for(let j= 0; j < this.AlienGroup.aliens.length; j++) {
-          this.game.scene.remove(this.AlienGroup.aliens[j].mesh);
-          this.game.scene.remove(this.AlienGroup.aliens[j].mesh2);
+        for(let j= 0; j < this.alienGroup.aliens.length; j++) {
+          this.game.scene.remove(this.alienGroup.aliens[j].mesh);
+          this.game.scene.remove(this.alienGroup.aliens[j].mesh2);
         }
-        this.AlienGroup.aliens = [];
+        this.alienGroup.aliens = [];
 
         for(let j= 0; j < this.alienBonus.length; j++) {
           this.game.scene.remove(this.alienBonus[j].mesh);
@@ -251,14 +253,14 @@ class World {
     }
 
     public killThemAll() {
-        for(let j= 0; j < this.AlienGroup.getLength(); j++) {
+        for(let j= 0; j < this.alienGroup.getLength(); j++) {
           soundAlienExplosion.play();
-          let e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.AlienGroup.get(j).mesh.position.clone());
+          let e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.alienGroup.get(j).mesh.position.clone());
           this.explosions.push(e);
-          this.game.scene.remove(this.AlienGroup.get(j).mesh);
-          this.game.scene.remove(this.AlienGroup.get(j).mesh2);
+          this.game.scene.remove(this.alienGroup.get(j).mesh);
+          this.game.scene.remove(this.alienGroup.get(j).mesh2);
         }
-        this.AlienGroup.aliens = [];
+        this.alienGroup.aliens = [];
     }
 
     public invinciblePad() {
@@ -281,16 +283,11 @@ class World {
     }
 
     public alienFire() {
-        // console.log('alien fire');
-        let AlienGroupSize = this.AlienGroup.getLength();
-
-        if (AlienGroupSize>0){ 
-          let m = this.AlienGroup.fire(AlienGroupSize);
-          if(m instanceof Missile) {
+        let m = this.alienGroup.fire();
+        if(m instanceof Missile) {
             this.missiles.push(m);
             this.game.scene.add(m.mesh);
             this.updateMissileLights();
-          }
         }
     }
 
@@ -301,9 +298,9 @@ class World {
     }
 
     public removeAlien(i: number) {
-        this.game.scene.remove(this.AlienGroup.get(i).mesh);
-        this.game.scene.remove(this.AlienGroup.get(i).mesh2);
-        this.AlienGroup.remove(i);
+        this.game.scene.remove(this.alienGroup.get(i).mesh);
+        this.game.scene.remove(this.alienGroup.get(i).mesh2);
+        this.alienGroup.remove(i);
     }
 
     private updateMissileLights() {
@@ -347,13 +344,13 @@ class World {
         if(this.onLevelInit) {
           let levelInitEnd = true;
           levelInitEnd = this.pad.animateReset();
-          for(let j= 0; j < this.AlienGroup.getLength(); j++) {
-            if(this.AlienGroup.get(j).mesh.position.z > 0) {
-              this.AlienGroup.get(j).mesh.position.z -= 0.05;
+          for(let j= 0; j < this.alienGroup.getLength(); j++) {
+            if(this.alienGroup.get(j).mesh.position.z > 0) {
+              this.alienGroup.get(j).mesh.position.z -= 0.05;
               levelInitEnd = false;
             }
             else {
-              this.AlienGroup.get(j).mesh.position.z = 0.0;
+              this.alienGroup.get(j).mesh.position.z = 0.0;
             }
           }
           for(let j= 0; j < this.blocks.length; j++) {
@@ -393,10 +390,10 @@ class World {
           
           // animate aliens
           if(this.invincible == true) {
-            this.AlienGroup.animate(false);
+            this.alienGroup.animate(false);
           }
           else {
-            this.AlienGroup.animate(true);
+            this.alienGroup.animate(true);
           }
           
           // alien fire
@@ -464,10 +461,10 @@ class World {
           
           // check missile collision with aliens
           for(let i= 0; i < this.missiles.length; i++) {
-            for(let j= 0; j < this.AlienGroup.getLength(); j++) {
-              if(!this.missiles[i].alien && boxCollision(this.AlienGroup.get(j),this.missiles[i])) {
+            for(let j= 0; j < this.alienGroup.getLength(); j++) {
+              if(!this.missiles[i].alien && boxCollision(this.alienGroup.get(j),this.missiles[i])) {
                 missilePadTouch = true;
-                let alien = this.AlienGroup.get(j);
+                let alien = this.alienGroup.get(j);
                 //console.log('missile collision avec alien');
                 // explosion
                 soundAlienExplosion.play();
@@ -483,7 +480,7 @@ class World {
                 }, this.game);
                 this.scores.push(s);
                 // bonus
-                if(Math.random() < BONUS_RATE) {
+                if(Math.random() < World.bonusRate) {
                   let b = new Bonus(this.game, Math.floor((Math.random()*2)+1), new THREE.Vector3(alien.mesh.position.x, alien.mesh.position.y, alien.mesh.position.z));
                   this.bonus.push(b);
                 }
@@ -550,7 +547,7 @@ class World {
           }
           
           // check if aliens have reach the player
-          if(this.AlienGroup.onBottom() > 0 && this.AlienGroup.onBottom() < 4.5) {
+          if(this.alienGroup.onBottom() < 4.5) {
             this.game.lose();
           }
 
@@ -605,6 +602,6 @@ class World {
     }
 
     public getAliensLengh() {
-        return this.AlienGroup.getLength();
+        return this.alienGroup.getLength();
     }
 }

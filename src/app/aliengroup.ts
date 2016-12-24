@@ -1,15 +1,20 @@
 class AlienGroup {
 
     static direction = { right: 1, left: -1 };
+    static positionBounds = { min: -11, max: 11 };
 
     aliens: Alien[];
     aliensBottom: number[];
+    gettingDown: number;
+    currentDirection: number;
     game: Game;
 
     constructor(game: Game) {
         this.aliens = [];
         this.aliensBottom = [];
         this.game = game;
+        this.gettingDown = 0;
+        this.currentDirection = AlienGroup.direction.right;
     }
   
     public addAlien(alien: Alien) : number {
@@ -17,6 +22,10 @@ class AlienGroup {
         return this.aliens.length-1;
     }
 
+    /**
+     * Return the position of the alien at the right side of the group.
+     * @return {number} The maximum right position.
+     */
     public onRight() : number {
         let max = -999;
         for(let i =0; i < this.aliens.length; i++) {
@@ -27,6 +36,10 @@ class AlienGroup {
         return max;
     }
 
+    /**
+     * Return the position of the alien at the left side of the group.
+     * @return {number} The maximum left position.
+     */
     public onLeft() : number {
         let min = 999;
         for(let i =0; i < this.aliens.length; i++) {
@@ -37,6 +50,10 @@ class AlienGroup {
         return min;
     }
 
+    /**
+     * Return the position of the alien at the bottom side of the group.
+     * @return {number} The maximum bottom position.
+     */
     public onBottom() : number {
         let min = 999;
         for(let i =0; i < this.aliens.length; i++) {
@@ -47,6 +64,11 @@ class AlienGroup {
         return min;
     }
 
+    /**
+     * Choose a random alien to fire.
+     * Return the index of the chosen one.
+     * @return {number} Index of an random alien which can fire.
+     */
     public chooseFiringAlien(): number {
         let x = this.aliensBottom[0];
         if(this.game.world.getLevel() < 2) {
@@ -113,46 +135,54 @@ class AlienGroup {
         return this.aliens[i];
     }
 
-    public fire(AlienGroupSize: number): boolean | Missile {
-        if (AlienGroupSize>0) {
-            let firingAlien = this.chooseFiringAlien();
-            let m = this.aliens[firingAlien].fire();
+    public fire(): boolean | Missile {
+        let firingAlien: number;
+        let m: Missile | boolean;
+
+        if(this.getLength()) {
+            firingAlien = this.chooseFiringAlien();
+            m = this.aliens[firingAlien].fire();
             if(m) {
                 soundAlienFire.play();
                 return m;
             }
-            else return false;
         }
         
         return false;
     }
 
-    public animate(fall: boolean = false) {
-        if (alienGetDown<=0) {         
-            if (this.onLeft()<xMin+1.5) {
-                dir = AlienGroup.direction.right;
-                for(let i= 0; i < this.aliens.length; i++) {
-                    this.aliens[i].animate(dir);
-                }
-                if(fall == true) {
-                    alienGetDown=8;
+    /**
+     * Animate all aliens.
+     * Make them to change change direction and to fall if needed.
+     * @param {boolean = true} canFall If false, aliens won't fall, they will only moving from left to right and right to left.
+     */
+    public animate(canFall: boolean = true) {
+        if(this.gettingDown <= 0) {         
+            if(this.onLeft() < AlienGroup.positionBounds.min + 1.5) {
+                this.currentDirection = AlienGroup.direction.right;
+                this.animateAliens();
+                if(canFall) {
+                    this.gettingDown = 8;
                 }
             }
-            if (this.onRight()>xMax-1.5) {
-                dir = AlienGroup.direction.left;
-                for(let i= 0; i < this.aliens.length; i++) {
-                    this.aliens[i].animate(dir);
-                }
-                if(fall == true) {
-                    alienGetDown=8;
+            if(this.onRight() > AlienGroup.positionBounds.max - 1.5) {
+                this.currentDirection = AlienGroup.direction.left;
+                this.animateAliens();
+                if(canFall) {
+                    this.gettingDown = 8;
                 }
             }
         }
-        if (alienGetDown>0) {
-            alienGetDown-=1;
+        else {
+            this.gettingDown -= 1;
         }
-        for(let i= 0; i < this.aliens.length; i++) {
-            this.aliens[i].animate(dir);
+
+        this.animateAliens();
+    }
+
+    public animateAliens() {
+        for(let i=0; i < this.aliens.length; i++) {
+            this.aliens[i].animate(this.currentDirection, this.gettingDown);
         }
     }
 }

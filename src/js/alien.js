@@ -59,9 +59,10 @@ var Alien = (function (_super) {
                 break;
         }
     };
-    Alien.prototype.animate = function (direction) {
+    Alien.prototype.animate = function (direction, gettingDown) {
         if (direction === void 0) { direction = AlienGroup.direction.right; }
-        if (alienGetDown <= 0) {
+        if (gettingDown === void 0) { gettingDown = 0; }
+        if (gettingDown <= 0) {
             this.mesh.position.x += this.velocity.x * direction;
             this.mesh.position.y += this.velocity.y;
             this.mesh.position.z += this.velocity.z;

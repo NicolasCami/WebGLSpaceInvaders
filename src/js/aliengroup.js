@@ -3,11 +3,17 @@ var AlienGroup = (function () {
         this.aliens = [];
         this.aliensBottom = [];
         this.game = game;
+        this.gettingDown = 0;
+        this.currentDirection = AlienGroup.direction.right;
     }
     AlienGroup.prototype.addAlien = function (alien) {
         this.aliens.push(alien);
         return this.aliens.length - 1;
     };
+    /**
+     * Return the position of the alien at the right side of the group.
+     * @return {number} The maximum right position.
+     */
     AlienGroup.prototype.onRight = function () {
         var max = -999;
         for (var i = 0; i < this.aliens.length; i++) {
@@ -17,6 +23,10 @@ var AlienGroup = (function () {
         }
         return max;
     };
+    /**
+     * Return the position of the alien at the left side of the group.
+     * @return {number} The maximum left position.
+     */
     AlienGroup.prototype.onLeft = function () {
         var min = 999;
         for (var i = 0; i < this.aliens.length; i++) {
@@ -26,6 +36,10 @@ var AlienGroup = (function () {
         }
         return min;
     };
+    /**
+     * Return the position of the alien at the bottom side of the group.
+     * @return {number} The maximum bottom position.
+     */
     AlienGroup.prototype.onBottom = function () {
         var min = 999;
         for (var i = 0; i < this.aliens.length; i++) {
@@ -35,6 +49,11 @@ var AlienGroup = (function () {
         }
         return min;
     };
+    /**
+     * Choose a random alien to fire.
+     * Return the index of the chosen one.
+     * @return {number} Index of an random alien which can fire.
+     */
     AlienGroup.prototype.chooseFiringAlien = function () {
         var x = this.aliensBottom[0];
         if (this.game.world.getLevel() < 2) {
@@ -93,49 +112,54 @@ var AlienGroup = (function () {
     AlienGroup.prototype.get = function (i) {
         return this.aliens[i];
     };
-    AlienGroup.prototype.fire = function (AlienGroupSize) {
-        if (AlienGroupSize > 0) {
-            var firingAlien = this.chooseFiringAlien();
-            var m = this.aliens[firingAlien].fire();
+    AlienGroup.prototype.fire = function () {
+        var firingAlien;
+        var m;
+        if (this.getLength()) {
+            firingAlien = this.chooseFiringAlien();
+            m = this.aliens[firingAlien].fire();
             if (m) {
                 soundAlienFire.play();
                 return m;
             }
-            else
-                return false;
         }
         return false;
     };
-    AlienGroup.prototype.animate = function (fall) {
-        if (fall === void 0) { fall = false; }
-        if (alienGetDown <= 0) {
-            if (this.onLeft() < xMin + 1.5) {
-                dir = AlienGroup.direction.right;
-                for (var i = 0; i < this.aliens.length; i++) {
-                    this.aliens[i].animate(dir);
-                }
-                if (fall == true) {
-                    alienGetDown = 8;
+    /**
+     * Animate all aliens.
+     * Make them to change change direction and to fall if needed.
+     * @param {boolean = true} canFall If false, aliens won't fall, they will only moving from left to right and right to left.
+     */
+    AlienGroup.prototype.animate = function (canFall) {
+        if (canFall === void 0) { canFall = true; }
+        if (this.gettingDown <= 0) {
+            if (this.onLeft() < AlienGroup.positionBounds.min + 1.5) {
+                this.currentDirection = AlienGroup.direction.right;
+                this.animateAliens();
+                if (canFall) {
+                    this.gettingDown = 8;
                 }
             }
-            if (this.onRight() > xMax - 1.5) {
-                dir = AlienGroup.direction.left;
-                for (var i = 0; i < this.aliens.length; i++) {
-                    this.aliens[i].animate(dir);
-                }
-                if (fall == true) {
-                    alienGetDown = 8;
+            if (this.onRight() > AlienGroup.positionBounds.max - 1.5) {
+                this.currentDirection = AlienGroup.direction.left;
+                this.animateAliens();
+                if (canFall) {
+                    this.gettingDown = 8;
                 }
             }
         }
-        if (alienGetDown > 0) {
-            alienGetDown -= 1;
+        else {
+            this.gettingDown -= 1;
         }
+        this.animateAliens();
+    };
+    AlienGroup.prototype.animateAliens = function () {
         for (var i = 0; i < this.aliens.length; i++) {
-            this.aliens[i].animate(dir);
+            this.aliens[i].animate(this.currentDirection, this.gettingDown);
         }
     };
     AlienGroup.direction = { right: 1, left: -1 };
+    AlienGroup.positionBounds = { min: -11, max: 11 };
     return AlienGroup;
 }());
 

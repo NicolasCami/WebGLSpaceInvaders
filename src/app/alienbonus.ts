@@ -4,14 +4,17 @@ class AlienBonus extends Alien {
     static steps = { init: 1, move: 2, end: 3 };
 
     step: number;
-  
+
     constructor(game: Game) {
         super(game, Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
 
         this.step = AlienBonus.steps.init;
     }
   
-    // return false if need to be deleted
+    /**
+     * Animate the alien.
+     * @return {boolean} If false, the alien have reach the end, it needs to be deleted.
+     */
     public animate(): boolean {
         if((Date.now() - this.lastMeshSwitch) > Alien.meshSwitchDelay) {  
             this.switchMesh();

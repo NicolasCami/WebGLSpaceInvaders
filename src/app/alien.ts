@@ -68,8 +68,8 @@ class Alien extends Game3dObject {
         }
     }
 
-    public animate(direction: number = AlienGroup.direction.right) {
-        if (alienGetDown<=0) {
+    public animate(direction: number = AlienGroup.direction.right, gettingDown: number = 0) {
+        if (gettingDown<=0) {
           this.mesh.position.x += this.velocity.x * direction;
           this.mesh.position.y += this.velocity.y;
           this.mesh.position.z += this.velocity.z;
@@ -89,17 +89,17 @@ class Alien extends Game3dObject {
 
     public switchMesh() {
         if (this.mesh.visible == true) {
-          this.mesh.visible = false;
-          this.mesh2.visible = true;
+            this.mesh.visible = false;
+            this.mesh2.visible = true;
         }
         else {
-          this.mesh2.visible = false;
-          this.mesh.visible = true;
+            this.mesh2.visible = false;
+            this.mesh.visible = true;
         }
     }
 
     public getScore = function() : number {
-      return this.score;
+        return this.score;
     }
 
     public fire = function() : Missile {

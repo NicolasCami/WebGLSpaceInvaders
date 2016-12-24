@@ -6,7 +6,6 @@ var World = (function () {
         this.scores = [];
         this.bonus = [];
         this.alienBonus = [];
-        this.destructionTimer = Date.now();
         this.missiles = [];
         this.lights = [];
         this.blocks = [];
@@ -23,7 +22,7 @@ var World = (function () {
         this.limitY = this.height;
         this.level = 0;
         this.onLevelInit = false;
-        this.AlienGroup = new AlienGroup(game);
+        this.alienGroup = new AlienGroup(game);
         this.LastFire = 0;
         this.lastAlienBonus = 0;
         this.alienBonusDelay = 2000;
@@ -120,20 +119,20 @@ var World = (function () {
         this.clear();
         switch (this.level) {
             case 0:
-                this.AlienGroup.init(5, 5, level);
-                for (var i = 0; i < this.AlienGroup.getLength(); i++) {
-                    this.AlienGroup.get(i).mesh.position.z = Math.random() * 6.0;
-                    this.game.scene.add(this.AlienGroup.get(i).mesh);
-                    this.game.scene.add(this.AlienGroup.get(i).mesh2);
+                this.alienGroup.init(5, 5, level);
+                for (var i = 0; i < this.alienGroup.getLength(); i++) {
+                    this.alienGroup.get(i).mesh.position.z = Math.random() * 6.0;
+                    this.game.scene.add(this.alienGroup.get(i).mesh);
+                    this.game.scene.add(this.alienGroup.get(i).mesh2);
                 }
                 this.initBunkers();
                 break;
             default:
-                this.AlienGroup.init(5, 5, level);
-                for (var i = 0; i < this.AlienGroup.getLength(); i++) {
-                    this.AlienGroup.get(i).mesh.position.z = Math.random() * 6.0;
-                    this.game.scene.add(this.AlienGroup.get(i).mesh);
-                    this.game.scene.add(this.AlienGroup.get(i).mesh2);
+                this.alienGroup.init(5, 5, level);
+                for (var i = 0; i < this.alienGroup.getLength(); i++) {
+                    this.alienGroup.get(i).mesh.position.z = Math.random() * 6.0;
+                    this.game.scene.add(this.alienGroup.get(i).mesh);
+                    this.game.scene.add(this.alienGroup.get(i).mesh2);
                 }
                 this.initBunkers();
                 break;
@@ -154,11 +153,11 @@ var World = (function () {
             this.game.scene.remove(this.blocks[j].mesh);
         }
         this.blocks = [];
-        for (var j = 0; j < this.AlienGroup.aliens.length; j++) {
-            this.game.scene.remove(this.AlienGroup.aliens[j].mesh);
-            this.game.scene.remove(this.AlienGroup.aliens[j].mesh2);
+        for (var j = 0; j < this.alienGroup.aliens.length; j++) {
+            this.game.scene.remove(this.alienGroup.aliens[j].mesh);
+            this.game.scene.remove(this.alienGroup.aliens[j].mesh2);
         }
-        this.AlienGroup.aliens = [];
+        this.alienGroup.aliens = [];
         for (var j = 0; j < this.alienBonus.length; j++) {
             this.game.scene.remove(this.alienBonus[j].mesh);
             this.game.scene.remove(this.alienBonus[j].mesh2);
@@ -184,14 +183,14 @@ var World = (function () {
         this.pad.resetPosition();
     };
     World.prototype.killThemAll = function () {
-        for (var j = 0; j < this.AlienGroup.getLength(); j++) {
+        for (var j = 0; j < this.alienGroup.getLength(); j++) {
             soundAlienExplosion.play();
-            var e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.AlienGroup.get(j).mesh.position.clone());
+            var e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.alienGroup.get(j).mesh.position.clone());
             this.explosions.push(e);
-            this.game.scene.remove(this.AlienGroup.get(j).mesh);
-            this.game.scene.remove(this.AlienGroup.get(j).mesh2);
+            this.game.scene.remove(this.alienGroup.get(j).mesh);
+            this.game.scene.remove(this.alienGroup.get(j).mesh2);
         }
-        this.AlienGroup.aliens = [];
+        this.alienGroup.aliens = [];
     };
     World.prototype.invinciblePad = function () {
         if (this.invincible == false)
@@ -210,15 +209,11 @@ var World = (function () {
         }
     };
     World.prototype.alienFire = function () {
-        // console.log('alien fire');
-        var AlienGroupSize = this.AlienGroup.getLength();
-        if (AlienGroupSize > 0) {
-            var m = this.AlienGroup.fire(AlienGroupSize);
-            if (m instanceof Missile) {
-                this.missiles.push(m);
-                this.game.scene.add(m.mesh);
-                this.updateMissileLights();
-            }
+        var m = this.alienGroup.fire();
+        if (m instanceof Missile) {
+            this.missiles.push(m);
+            this.game.scene.add(m.mesh);
+            this.updateMissileLights();
         }
     };
     World.prototype.removeMissile = function (i) {
@@ -227,9 +222,9 @@ var World = (function () {
         this.updateMissileLights();
     };
     World.prototype.removeAlien = function (i) {
-        this.game.scene.remove(this.AlienGroup.get(i).mesh);
-        this.game.scene.remove(this.AlienGroup.get(i).mesh2);
-        this.AlienGroup.remove(i);
+        this.game.scene.remove(this.alienGroup.get(i).mesh);
+        this.game.scene.remove(this.alienGroup.get(i).mesh2);
+        this.alienGroup.remove(i);
     };
     World.prototype.updateMissileLights = function () {
         // empty
@@ -270,13 +265,13 @@ var World = (function () {
         if (this.onLevelInit) {
             var levelInitEnd = true;
             levelInitEnd = this.pad.animateReset();
-            for (var j = 0; j < this.AlienGroup.getLength(); j++) {
-                if (this.AlienGroup.get(j).mesh.position.z > 0) {
-                    this.AlienGroup.get(j).mesh.position.z -= 0.05;
+            for (var j = 0; j < this.alienGroup.getLength(); j++) {
+                if (this.alienGroup.get(j).mesh.position.z > 0) {
+                    this.alienGroup.get(j).mesh.position.z -= 0.05;
                     levelInitEnd = false;
                 }
                 else {
-                    this.AlienGroup.get(j).mesh.position.z = 0.0;
+                    this.alienGroup.get(j).mesh.position.z = 0.0;
                 }
             }
             for (var j = 0; j < this.blocks.length; j++) {
@@ -313,10 +308,10 @@ var World = (function () {
             }
             // animate aliens
             if (this.invincible == true) {
-                this.AlienGroup.animate(false);
+                this.alienGroup.animate(false);
             }
             else {
-                this.AlienGroup.animate(true);
+                this.alienGroup.animate(true);
             }
             // alien fire
             if ((Date.now() - this.LastFire) > 1000) {
@@ -376,10 +371,10 @@ var World = (function () {
             }
             // check missile collision with aliens
             for (var i = 0; i < this.missiles.length; i++) {
-                for (var j = 0; j < this.AlienGroup.getLength(); j++) {
-                    if (!this.missiles[i].alien && boxCollision(this.AlienGroup.get(j), this.missiles[i])) {
+                for (var j = 0; j < this.alienGroup.getLength(); j++) {
+                    if (!this.missiles[i].alien && boxCollision(this.alienGroup.get(j), this.missiles[i])) {
                         missilePadTouch = true;
-                        var alien = this.AlienGroup.get(j);
+                        var alien = this.alienGroup.get(j);
                         //console.log('missile collision avec alien');
                         // explosion
                         soundAlienExplosion.play();
@@ -395,7 +390,7 @@ var World = (function () {
                         }, this.game);
                         this.scores.push(s);
                         // bonus
-                        if (Math.random() < BONUS_RATE) {
+                        if (Math.random() < World.bonusRate) {
                             var b = new Bonus(this.game, Math.floor((Math.random() * 2) + 1), new THREE.Vector3(alien.mesh.position.x, alien.mesh.position.y, alien.mesh.position.z));
                             this.bonus.push(b);
                         }
@@ -460,7 +455,7 @@ var World = (function () {
                 }
             }
             // check if aliens have reach the player
-            if (this.AlienGroup.onBottom() > 0 && this.AlienGroup.onBottom() < 4.5) {
+            if (this.alienGroup.onBottom() < 4.5) {
                 this.game.lose();
             }
             // check block collision
@@ -510,8 +505,9 @@ var World = (function () {
         return this.level;
     };
     World.prototype.getAliensLengh = function () {
-        return this.AlienGroup.getLength();
+        return this.alienGroup.getLength();
     };
+    World.bonusRate = 0.1;
     return World;
 }());
 

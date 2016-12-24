@@ -362,15 +362,9 @@ textArray.forEach(function (text) {
         height: 3,
     });
 });
+// polyfill
 if (!Date.now) {
     Date.now = function () { return new Date().getTime(); };
 }
-var xMin = -11;
-var xMax = 11;
-var yMin = -20;
-var yMax = 2;
-var dir = 1;
-var alienGetDown = 0;
-var BONUS_RATE = 0.1;
 
 //# sourceMappingURL=functions.js.map
