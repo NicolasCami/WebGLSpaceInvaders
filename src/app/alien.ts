@@ -103,12 +103,6 @@ class Alien extends Game3dObject {
     }
 
     public fire = function() : Missile {
-        return new Missile({
-            x : this.mesh.position.x - this.missileX,
-            y : this.mesh.position.y - this.missileY,
-            z : this.mesh.position.z - this.missileZ,
-            vy : this.missileVelocity,
-            alien: true,
-        }, this.game);
+        return new Missile(this.game, false, true, new THREE.Vector3(this.mesh.position.x - this.missileX, this.mesh.position.y - this.missileY, this.mesh.position.z - this.missileZ));
     }
 }

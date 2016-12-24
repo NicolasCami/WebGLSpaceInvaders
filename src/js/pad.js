@@ -85,20 +85,11 @@ var Pad = (function () {
                 soundPadFire.play();
                 var m = null;
                 if (this.missileInvincible) {
-                    m = new Missile({
-                        x: this.mesh.position.x + this.missileX,
-                        y: this.mesh.position.y + this.missileY,
-                        z: this.mesh.position.z + this.missileZ,
-                        invincible: true,
-                    }, this.game);
+                    m = new Missile(this.game, true, false, new THREE.Vector3(this.mesh.position.x + this.missileX, this.mesh.position.y + this.missileY, this.mesh.position.z + this.missileZ));
                     this.missileInvincible -= 1;
                 }
                 else {
-                    m = new Missile({
-                        x: this.mesh.position.x + this.missileX,
-                        y: this.mesh.position.y + this.missileY,
-                        z: this.mesh.position.z + this.missileZ,
-                    }, this.game);
+                    m = new Missile(this.game, false, false, new THREE.Vector3(this.mesh.position.x + this.missileX, this.mesh.position.y + this.missileY, this.mesh.position.z + this.missileZ));
                 }
                 if (this.missileFast > 0) {
                     this.missileFast -= 1;
