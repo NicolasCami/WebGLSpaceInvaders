@@ -44,7 +44,7 @@ var World = (function () {
     World.prototype.init = function () {
         this.destructionTimer = Date.now();
         this.place.position.set(this.x, this.y - 200, this.z + 0.1);
-        var squareMaterial = new THREE.MeshBasicMaterial({
+        var squareMaterial = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
             side: THREE.DoubleSide,
             opacity: 0.5,
@@ -192,15 +192,7 @@ var World = (function () {
     World.prototype.killThemAll = function () {
         for (var j = 0; j < this.AlienGroup.getLength(); j++) {
             soundAlienExplosion.play();
-            var e = new Explosion({
-                x: this.AlienGroup.get(j).mesh.position.x,
-                y: this.AlienGroup.get(j).mesh.position.y,
-                z: this.AlienGroup.get(j).mesh.position.z,
-                size: 1.5,
-                particleNb: 50,
-                particleSize: 0.4,
-                particleColor: 0xff0000,
-            }, this.game);
+            var e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.AlienGroup.get(j).mesh.position.clone());
             this.explosions.push(e);
             this.game.scene.remove(this.AlienGroup.get(j).mesh);
             this.game.scene.remove(this.AlienGroup.get(j).mesh2);
@@ -214,15 +206,7 @@ var World = (function () {
             this.invincible = false;
     };
     World.prototype.killPad = function () {
-        var e = new Explosion({
-            x: this.pad.mesh.position.x,
-            y: this.pad.mesh.position.y,
-            z: this.pad.mesh.position.z,
-            size: 1.5,
-            particleNb: 100,
-            particleSize: 0.5,
-            particleColor: 0x2FA1D6,
-        }, this.game);
+        var e = new Explosion(this.game, 1.5, 100, 0.5, 0x2FA1D6, this.pad.mesh.position.clone());
         this.explosions.push(e);
     };
     World.prototype.padFire = function () {
@@ -278,15 +262,7 @@ var World = (function () {
                 this.earth.visible = false;
                 this.earthDestroyed = true;
                 this.deathBeamLoad.visible = false;
-                var e_1 = new Explosion({
-                    x: this.earth.position.x,
-                    y: this.earth.position.y,
-                    z: this.earth.position.z,
-                    size: 100,
-                    particleNb: 200,
-                    particleSize: 10,
-                    particleColor: 0x354696,
-                }, this.game);
+                var e_1 = new Explosion(this.game, 100, 200, 10, 0x354696, this.earth.position.clone());
                 this.explosions.push(e_1);
             }
         }
@@ -415,15 +391,7 @@ var World = (function () {
                         //console.log('missile collision avec alien');
                         // explosion
                         soundAlienExplosion.play();
-                        e = new Explosion({
-                            x: alien.mesh.position.x,
-                            y: alien.mesh.position.y,
-                            z: alien.mesh.position.z,
-                            size: 1.5,
-                            particleNb: 50,
-                            particleSize: 0.4,
-                            particleColor: alien.explosionColor,
-                        }, this.game);
+                        e = new Explosion(this.game, 1.5, 50, 0.4, alien.explosionColor, alien.mesh.position.clone());
                         this.explosions.push(e);
                         // score
                         this.game.updateScore(alien.getScore());
@@ -436,12 +404,7 @@ var World = (function () {
                         this.scores.push(s);
                         // bonus
                         if (Math.random() < BONUS_RATE) {
-                            var b = new Bonus({
-                                x: alien.mesh.position.x,
-                                y: alien.mesh.position.y,
-                                z: alien.mesh.position.z,
-                                type: Math.floor((Math.random() * 2) + 1),
-                            }, this.game);
+                            var b = new Bonus(this.game, Math.floor((Math.random() * 2) + 1), new THREE.Vector3(alien.mesh.position.x, alien.mesh.position.y, alien.mesh.position.z));
                             this.bonus.push(b);
                         }
                         // kill alien
@@ -462,15 +425,7 @@ var World = (function () {
                         var alien = this.alienBonus[j];
                         // explosion
                         soundAlienExplosion.play();
-                        e = new Explosion({
-                            x: alien.mesh.position.x,
-                            y: alien.mesh.position.y,
-                            z: alien.mesh.position.z,
-                            size: 1.5,
-                            particleNb: 50,
-                            particleSize: 0.4,
-                            particleColor: 0xff0000,
-                        }, this.game);
+                        e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, alien.mesh.position.clone());
                         this.explosions.push(e);
                         // score
                         this.game.updateScore(alien.getScore());
@@ -525,15 +480,7 @@ var World = (function () {
                         }
                         // explosion
                         soundBlockExplosion.play();
-                        e = new Explosion({
-                            x: this.blocks[j].mesh.position.x,
-                            y: this.blocks[j].mesh.position.y,
-                            z: this.blocks[j].mesh.position.z,
-                            size: 1.5,
-                            particleNb: 30,
-                            particleSize: 0.2,
-                            particleColor: 0x22dd33,
-                        }, this.game);
+                        e = new Explosion(this.game, 1.5, 30, 0.2, 0x22dd33, this.blocks[j].mesh.position.clone());
                         this.explosions.push(e);
                         // kill block
                         this.game.scene.remove(this.blocks[j].mesh);
@@ -554,15 +501,7 @@ var World = (function () {
                     // give bonus to pad
                     this.pad.addBonus(this.bonus[i]);
                     // explosion
-                    e = new Explosion({
-                        x: this.pad.mesh.position.x,
-                        y: this.pad.mesh.position.y,
-                        z: this.pad.mesh.position.z,
-                        size: 1.5,
-                        particleNb: 30,
-                        particleSize: 0.2,
-                        particleColor: 0x22dd33,
-                    }, this.game);
+                    e = new Explosion(this.game, 1.5, 30, 0.2, 0x22dd33, this.pad.mesh.position.clone());
                     this.explosions.push(e);
                     // kill bonus
                     this.game.scene.remove(this.bonus[i].mesh);

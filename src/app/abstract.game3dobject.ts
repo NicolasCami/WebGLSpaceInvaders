@@ -5,7 +5,7 @@ abstract class Game3dObject {
     size: THREE.Vector3;
     velocity: THREE.Vector3;
     initialPosition: THREE.Vector3;
-    mesh: THREE.Mesh;
+    mesh: THREE.Mesh | THREE.PointCloud;
     game: Game;
 
     constructor(game: Game,
