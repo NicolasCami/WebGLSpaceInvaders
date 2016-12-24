@@ -76,14 +76,7 @@ class AlienGroup {
                     type = Alien.type.top;
                 }
 
-                this.addAlien(new Alien({
-                    x : -5 + j*2,
-                    y : 20.0 - i*2,
-                    z : 0.0,
-                    vx : 0.05 + (0.01*level),
-                    type : type,
-                    missileVelocity : -0.1 - (level*0.02),
-                }, this.game));
+                this.addAlien(new Alien(this.game, type, new THREE.Vector3(0.05 + (0.01*level), 0.0, 0.0), new THREE.Vector3(-5 + j*2, 20.0 - i*2, 0.0), -0.1 - (level*0.02)));
             }
         }
         this.computeAliensBottom();

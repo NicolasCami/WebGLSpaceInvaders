@@ -1,100 +1,87 @@
-var Alien = (function () {
-    function Alien(params, game) {
-        this.getX = function () {
-            return this.mesh.position.x;
-        };
-        this.getY = function () {
-            return this.mesh.position.y;
-        };
-        this.minX = function () {
-            return this.mesh.position.x - (this.size.x / 2);
-        };
-        this.minY = function () {
-            return this.mesh.position.y - (this.size.y / 2);
-        };
-        this.minZ = function () {
-            return this.mesh.position.z - (this.size.z / 2);
-        };
-        this.maxX = function () {
-            return this.mesh.position.x + (this.size.x / 2);
-        };
-        this.maxY = function () {
-            return this.mesh.position.y + (this.size.y / 2);
-        };
-        this.maxZ = function () {
-            return this.mesh.position.z + (this.size.z / 2);
-        };
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Alien = (function (_super) {
+    __extends(Alien, _super);
+    function Alien(game, type, velocity, position, missileVelocity) {
+        if (type === void 0) { type = Alien.type.top; }
+        if (velocity === void 0) { velocity = new THREE.Vector3(0.0, 0.0, 0.0); }
+        if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
+        if (missileVelocity === void 0) { missileVelocity = -1.0; }
+        _super.call(this, game, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
         this.getScore = function () {
             return this.score;
         };
         this.fire = function () {
-            var m = new Missile({
+            return new Missile({
                 x: this.mesh.position.x - this.missileX,
                 y: this.mesh.position.y - this.missileY,
                 z: this.mesh.position.z - this.missileZ,
                 vy: this.missileVelocity,
                 alien: true,
             }, this.game);
-            return m;
         };
-        this.score = typeof params.score !== 'undefined' ? params.score : 100;
-        this.type = typeof params.type !== 'undefined' ? params.type : 3;
-        this.vx = typeof params.vx !== 'undefined' ? params.vx : Alien.INCREMENT;
-        this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
-        this.vz = typeof params.vz !== 'undefined' ? params.vz : 0.0;
-        this.LastSwitch = 0;
-        this.missileX = typeof params.missileX !== 'undefined' ? params.missileX : 0.0;
-        this.missileY = typeof params.missileY !== 'undefined' ? params.missileY : 1.0;
-        this.missileZ = typeof params.missileZ !== 'undefined' ? params.missileZ : 0.0;
-        this.missileVelocity = typeof params.missileVelocity !== 'undefined' ? params.missileVelocity : -0.1;
+        this.type = type;
+        this.lastMeshSwitch = 0;
+        this.missileX = 0.0;
+        this.missileY = 1.0;
+        this.missileZ = 0.0;
+        this.missileVelocity = missileVelocity;
+        this.init();
+        this.mesh2.position.copy(this.initialPosition);
+        this.game.scene.add(this.mesh2);
+    }
+    Alien.prototype.initMesh = function () {
         switch (this.type) {
-            case 1:
+            case Alien.type.bottom:
                 this.mesh = randFromArray(alienData.type[0].model1).clone();
                 this.mesh2 = randFromArray(alienData.type[0].model2).clone();
                 this.mesh2.visible = false;
                 this.score = 200;
                 this.explosionColor = 0x85b66c;
                 break;
-            case 2:
+            case Alien.type.middle:
                 this.mesh = randFromArray(alienData.type[1].model1).clone();
                 this.mesh2 = randFromArray(alienData.type[1].model2).clone();
                 this.mesh2.visible = false;
                 this.score = 150;
                 this.explosionColor = 0x3d6686;
                 break;
-            case 3:
+            case Alien.type.top:
                 this.mesh = randFromArray(alienData.type[2].model1).clone();
                 this.mesh2 = randFromArray(alienData.type[2].model2).clone();
                 this.mesh2.visible = false;
                 this.score = 100;
                 this.explosionColor = 0xaf72c5;
                 break;
+            case Alien.type.bonus:
+                this.mesh = randFromArray(alienData.type[3].model1).clone();
+                this.mesh2 = randFromArray(alienData.type[3].model2).clone();
+                this.mesh2.visible = false;
+                this.score = 500;
+                this.explosionColor = 0xaf72c5;
+                break;
         }
-        this.mesh.position.x = typeof params.x !== 'undefined' ? params.x : 0.0;
-        this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 0.0;
-        this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 0.0;
-        this.mesh2.position.x = typeof params.x !== 'undefined' ? params.x : this.mesh.position.x;
-        this.mesh2.position.y = typeof params.y !== 'undefined' ? params.y : this.mesh.position.y;
-        this.mesh2.position.z = typeof params.z !== 'undefined' ? params.z : this.mesh.position.z;
-        this.size = typeof params.size !== 'undefined' ? params.size : { x: 1.0, y: 1.0, z: 1.0 };
-        this.game = game;
-    }
-    Alien.prototype.animate = function (l) {
+    };
+    Alien.prototype.animate = function (direction) {
+        if (direction === void 0) { direction = AlienGroup.direction.right; }
         if (alienGetDown <= 0) {
-            this.mesh.position.x += this.vx * l;
-            this.mesh.position.y += this.vy;
-            this.mesh.position.z += this.vz;
-            this.mesh2.position.x += this.vx * l;
-            this.mesh2.position.y += this.vy;
-            this.mesh2.position.z += this.vz;
+            this.mesh.position.x += this.velocity.x * direction;
+            this.mesh.position.y += this.velocity.y;
+            this.mesh.position.z += this.velocity.z;
+            this.mesh2.position.x += this.velocity.x * direction;
+            this.mesh2.position.y += this.velocity.y;
+            this.mesh2.position.z += this.velocity.z;
         }
         else {
             this.mesh.position.y -= 0.1;
             this.mesh2.position.y -= 0.1;
         }
-        if ((Date.now() - this.LastSwitch) > 1000) {
+        if ((Date.now() - this.lastMeshSwitch) > Alien.meshSwitchDelay) {
             this.switchMesh();
-            this.LastSwitch = Date.now();
+            this.lastMeshSwitch = Date.now();
         }
     };
     Alien.prototype.switchMesh = function () {
@@ -107,8 +94,10 @@ var Alien = (function () {
             this.mesh.visible = true;
         }
     };
-    Alien.INCREMENT = 0.05;
+    Alien.increment = 0.05;
+    Alien.meshSwitchDelay = 1000;
+    Alien.type = { bottom: 1, middle: 2, top: 3, bonus: 4 };
     return Alien;
-}());
+}(Game3dObject));
 
 //# sourceMappingURL=alien.js.map

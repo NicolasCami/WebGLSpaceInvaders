@@ -145,12 +145,8 @@ class World {
     }
 
     public addAlienBonus() {
-        let a = new AlienBonus({
-          missileVelocity : -0.1,
-        }, this.game)
+        let a = new AlienBonus(this.game);
         this.alienBonus.push(a);
-        this.game.scene.add(a.mesh);
-        this.game.scene.add(a.mesh2);
     }
 
     public randomAlienBonus() {

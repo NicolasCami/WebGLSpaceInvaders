@@ -1,79 +1,81 @@
-class Alien {
+class Alien extends Game3dObject {
 
     static increment = 0.05;
     static meshSwitchDelay = 1000;
-    static type = { bottom: 1, middle: 2, top: 3 };
+    static type = { bottom: 1, middle: 2, top: 3, bonus: 4 };
 
     score: number;
     type: number;
-    vx: number;
-    vy: number;
-    vz: number;
     lastMeshSwitch: number;
     missileX: number;
     missileY: number;
     missileZ: number;
     missileVelocity: number;
-    size: any;
     explosionColor: number;
-    mesh: THREE.Mesh;
     mesh2: THREE.Mesh;
-    game: Game;
 
-    constructor(params: any, game: Game) {
-        this.score = typeof params.score !== 'undefined' ? params.score : 100;
-        this.type = typeof params.type !== 'undefined' ? params.type : 3;
-        this.vx = typeof params.vx !== 'undefined' ? params.vx : Alien.increment;
-        this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
-        this.vz = typeof params.vz !== 'undefined' ? params.vz : 0.0;
+    constructor(game: Game,
+                type: number = Alien.type.top,
+                velocity: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
+                position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
+                missileVelocity: number = -1.0) {
+
+        super(game, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
+        
+        this.type = type;
         this.lastMeshSwitch = 0;
-        this.missileX = typeof params.missileX !== 'undefined' ? params.missileX : 0.0;
-        this.missileY = typeof params.missileY !== 'undefined' ? params.missileY : 1.0;
-        this.missileZ = typeof params.missileZ !== 'undefined' ? params.missileZ : 0.0;
-        this.missileVelocity = typeof params.missileVelocity !== 'undefined' ? params.missileVelocity : -0.1;
+        this.missileX = 0.0;
+        this.missileY = 1.0;
+        this.missileZ = 0.0;
+        this.missileVelocity = missileVelocity;
+
+        this.init();
+
+        this.mesh2.position.copy(this.initialPosition);
+        this.game.scene.add(this.mesh2);
+    }
+
+    public initMesh() {
         switch(this.type) {
             case Alien.type.bottom:
-              this.mesh = randFromArray(alienData.type[0].model1).clone();
-              this.mesh2 = randFromArray(alienData.type[0].model2).clone();
-                    this.mesh2.visible = false;
-                    this.score = 200;
-                    this.explosionColor = 0x85b66c;
+                this.mesh = randFromArray(alienData.type[0].model1).clone();
+                this.mesh2 = randFromArray(alienData.type[0].model2).clone();
+                this.mesh2.visible = false;
+                this.score = 200;
+                this.explosionColor = 0x85b66c;
               break;
             case Alien.type.middle:
-              this.mesh = randFromArray(alienData.type[1].model1).clone();
-              this.mesh2 = randFromArray(alienData.type[1].model2).clone();
-                    this.mesh2.visible = false;
-                    this.score = 150;
-                    this.explosionColor = 0x3d6686;
+                this.mesh = randFromArray(alienData.type[1].model1).clone();
+                this.mesh2 = randFromArray(alienData.type[1].model2).clone();
+                this.mesh2.visible = false;
+                this.score = 150;
+                this.explosionColor = 0x3d6686;
               break;
             case Alien.type.top:
-              this.mesh = randFromArray(alienData.type[2].model1).clone();
-              this.mesh2 = randFromArray(alienData.type[2].model2).clone();
-                    this.mesh2.visible = false;
-                    this.score = 100;
-                    this.explosionColor = 0xaf72c5;
+                this.mesh = randFromArray(alienData.type[2].model1).clone();
+                this.mesh2 = randFromArray(alienData.type[2].model2).clone();
+                this.mesh2.visible = false;
+                this.score = 100;
+                this.explosionColor = 0xaf72c5;
+              break;
+            case Alien.type.bonus:
+                this.mesh = randFromArray(alienData.type[3].model1).clone();
+                this.mesh2 = randFromArray(alienData.type[3].model2).clone();
+                this.mesh2.visible = false;
+                this.score = 500;
+                this.explosionColor = 0xaf72c5;
               break;
         }
-        this.mesh.position.x = typeof params.x !== 'undefined' ? params.x : 0.0;
-        this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 0.0;
-        this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 0.0;
-
-        this.mesh2.position.x = typeof params.x !== 'undefined' ? params.x : this.mesh.position.x;
-        this.mesh2.position.y = typeof params.y !== 'undefined' ? params.y : this.mesh.position.y;
-        this.mesh2.position.z = typeof params.z !== 'undefined' ? params.z : this.mesh.position.z;
-
-        this.size = typeof params.size !== 'undefined' ? params.size : {x:1.0, y:1.0, z:1.0};
-        this.game = game;
     }
 
     public animate(direction: number = AlienGroup.direction.right) {
         if (alienGetDown<=0) {
-          this.mesh.position.x += this.vx * direction;
-          this.mesh.position.y += this.vy;
-          this.mesh.position.z += this.vz;
-          this.mesh2.position.x += this.vx * direction;
-          this.mesh2.position.y += this.vy;
-          this.mesh2.position.z += this.vz;
+          this.mesh.position.x += this.velocity.x * direction;
+          this.mesh.position.y += this.velocity.y;
+          this.mesh.position.z += this.velocity.z;
+          this.mesh2.position.x += this.velocity.x * direction;
+          this.mesh2.position.y += this.velocity.y;
+          this.mesh2.position.z += this.velocity.z;
         }
         else {
           this.mesh.position.y -= 0.1;
@@ -94,38 +96,6 @@ class Alien {
           this.mesh2.visible = false;
           this.mesh.visible = true;
         }
-    }
-
-    public getX = function() : number {
-        return this.mesh.position.x;
-    }
-
-    public getY = function() : number {
-      return this.mesh.position.y;
-    }
-
-    public minX = function() : number {
-      return this.mesh.position.x-(this.size.x/2);
-    }
-
-    public minY = function() : number {
-      return this.mesh.position.y-(this.size.y/2);
-    }
-
-    public minZ = function() : number {
-      return this.mesh.position.z-(this.size.z/2);
-    }
-
-    public maxX = function() : number {
-      return this.mesh.position.x+(this.size.x/2);
-    }
-
-    public maxY = function() : number {
-      return this.mesh.position.y+(this.size.y/2);
-    }
-
-    public maxZ = function() : number {
-      return this.mesh.position.z+(this.size.z/2);
     }
 
     public getScore = function() : number {

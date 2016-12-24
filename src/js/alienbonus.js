@@ -5,53 +5,39 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var AlienBonus = (function (_super) {
     __extends(AlienBonus, _super);
-    function AlienBonus(params, game) {
-        _super.call(this, params, game);
-        this.vx = typeof params.vx !== 'undefined' ? params.vx : AlienBonus.INCREMENT;
-        this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
-        this.vz = typeof params.vz !== 'undefined' ? params.vz : AlienBonus.INCREMENT;
-        this.LastSwitch = 0;
-        this.step = 'init';
-        this.mesh = randFromArray(alienData.type[3].model1).clone();
-        this.mesh2 = randFromArray(alienData.type[3].model2).clone();
-        this.mesh2.visible = false;
-        this.score = 500;
-        this.mesh.position.x = typeof params.x !== 'undefined' ? params.x : 10.0;
-        this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 21.0;
-        this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 10.0;
-        this.mesh2.position.x = typeof params.x !== 'undefined' ? params.x : this.mesh.position.x;
-        this.mesh2.position.y = typeof params.y !== 'undefined' ? params.y : this.mesh.position.y;
-        this.mesh2.position.z = typeof params.z !== 'undefined' ? params.z : this.mesh.position.z;
+    function AlienBonus(game) {
+        _super.call(this, game, Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
+        this.step = AlienBonus.steps.init;
     }
     // return false if need to be deleted
     AlienBonus.prototype.animate = function () {
-        if ((Date.now() - this.LastSwitch) > 1000) {
+        if ((Date.now() - this.lastMeshSwitch) > Alien.meshSwitchDelay) {
             this.switchMesh();
-            this.LastSwitch = Date.now();
+            this.lastMeshSwitch = Date.now();
         }
         switch (this.step) {
-            case 'init':
+            case AlienBonus.steps.init:
                 if (this.mesh.position.z > 0) {
-                    this.mesh.position.z -= this.vz;
-                    this.mesh2.position.z -= this.vz;
+                    this.mesh.position.z -= this.velocity.z;
+                    this.mesh2.position.z -= this.velocity.z;
                 }
                 else {
                     this.mesh.position.z = 0.0;
                     this.mesh2.position.z = 0.0;
-                    this.step = 'move';
+                    this.step = AlienBonus.steps.move;
                 }
                 break;
-            case 'move':
-                this.mesh.position.x -= this.vx;
-                this.mesh2.position.x -= this.vx;
+            case AlienBonus.steps.move:
+                this.mesh.position.x -= this.velocity.x;
+                this.mesh2.position.x -= this.velocity.x;
                 if (this.mesh.position.x < -10.0) {
-                    this.step = 'end';
+                    this.step = AlienBonus.steps.end;
                 }
                 break;
-            case 'end':
+            case AlienBonus.steps.end:
                 if (this.mesh.position.z < 10.0) {
-                    this.mesh.position.z += this.vz;
-                    this.mesh2.position.z += this.vz;
+                    this.mesh.position.z += this.velocity.z;
+                    this.mesh2.position.z += this.velocity.z;
                 }
                 else {
                     return false;
@@ -61,7 +47,8 @@ var AlienBonus = (function (_super) {
         return true;
     };
     ;
-    AlienBonus.INCREMENT = 0.03;
+    AlienBonus.increment = 0.03;
+    AlienBonus.steps = { init: 1, move: 2, end: 3 };
     return AlienBonus;
 }(Alien));
 

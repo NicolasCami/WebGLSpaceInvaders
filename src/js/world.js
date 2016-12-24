@@ -98,12 +98,8 @@ var World = (function () {
         this.blocks.push(block);
     };
     World.prototype.addAlienBonus = function () {
-        var a = new AlienBonus({
-            missileVelocity: -0.1,
-        }, this.game);
+        var a = new AlienBonus(this.game);
         this.alienBonus.push(a);
-        this.game.scene.add(a.mesh);
-        this.game.scene.add(a.mesh2);
     };
     World.prototype.randomAlienBonus = function () {
         if (this.alienBonus.length == 0) {

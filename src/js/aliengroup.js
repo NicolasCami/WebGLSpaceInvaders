@@ -6,28 +6,32 @@ var AlienGroup = (function () {
     }
     AlienGroup.prototype.addAlien = function (alien) {
         this.aliens.push(alien);
+        return this.aliens.length - 1;
     };
     AlienGroup.prototype.onRight = function () {
         var max = -999;
         for (var i = 0; i < this.aliens.length; i++) {
-            if (this.aliens[i].getX() > max)
+            if (this.aliens[i].getX() > max) {
                 max = this.aliens[i].getX();
+            }
         }
         return max;
     };
     AlienGroup.prototype.onLeft = function () {
         var min = 999;
         for (var i = 0; i < this.aliens.length; i++) {
-            if (this.aliens[i].getX() < min)
+            if (this.aliens[i].getX() < min) {
                 min = this.aliens[i].getX();
+            }
         }
         return min;
     };
     AlienGroup.prototype.onBottom = function () {
         var min = 999;
         for (var i = 0; i < this.aliens.length; i++) {
-            if (this.aliens[i].getY() < min)
+            if (this.aliens[i].getY() < min) {
                 min = this.aliens[i].getY();
+            }
         }
         return min;
     };
@@ -46,30 +50,24 @@ var AlienGroup = (function () {
         return x;
     };
     AlienGroup.prototype.init = function (lines, rows, level) {
-        var _type;
+        var type;
         for (var i = 0; i < lines; i++) {
             for (var j = 0; j < rows; j++) {
-                if (i == 0)
-                    _type = 1;
-                else if (i < 3)
-                    _type = 2;
-                else
-                    _type = 3;
-                this.addAlien(new Alien({
-                    x: -5 + j * 2,
-                    y: 20.0 - i * 2,
-                    z: 0.0,
-                    vx: 0.05 + (0.01 * level),
-                    type: _type,
-                    missileVelocity: -0.1 - (level * 0.02),
-                }, this.game));
+                if (i == 0) {
+                    type = Alien.type.bottom;
+                }
+                else if (i < 3) {
+                    type = Alien.type.middle;
+                }
+                else {
+                    type = Alien.type.top;
+                }
+                this.addAlien(new Alien(this.game, type, new THREE.Vector3(0.05 + (0.01 * level), 0.0, 0.0), new THREE.Vector3(-5 + j * 2, 20.0 - i * 2, 0.0), -0.1 - (level * 0.02)));
             }
         }
-        this.aliensBottom = [24, 23, 22, 21, 20];
+        this.computeAliensBottom();
     };
-    AlienGroup.prototype.remove = function (i) {
-        this.aliens.splice(i, 1);
-        // recherche des aliens en bas de colonnes
+    AlienGroup.prototype.computeAliensBottom = function () {
         this.aliensBottom = [];
         for (var j = 0; j < this.aliens.length; j++) {
             var add = true;
@@ -84,6 +82,10 @@ var AlienGroup = (function () {
                 this.aliensBottom.push(j);
             }
         }
+    };
+    AlienGroup.prototype.remove = function (i) {
+        this.aliens.splice(i, 1);
+        this.computeAliensBottom();
     };
     AlienGroup.prototype.getLength = function () {
         return this.aliens.length;
@@ -102,36 +104,38 @@ var AlienGroup = (function () {
             else
                 return false;
         }
-        else
-            return false;
+        return false;
     };
     AlienGroup.prototype.animate = function (fall) {
-        fall = typeof fall !== 'undefined' ? fall : true;
+        if (fall === void 0) { fall = false; }
         if (alienGetDown <= 0) {
             if (this.onLeft() < xMin + 1.5) {
-                dir = 1;
+                dir = AlienGroup.direction.right;
                 for (var i = 0; i < this.aliens.length; i++) {
                     this.aliens[i].animate(dir);
                 }
-                if (fall == true)
+                if (fall == true) {
                     alienGetDown = 8;
+                }
             }
             if (this.onRight() > xMax - 1.5) {
-                dir = -1;
+                dir = AlienGroup.direction.left;
                 for (var i = 0; i < this.aliens.length; i++) {
                     this.aliens[i].animate(dir);
                 }
-                if (fall == true)
+                if (fall == true) {
                     alienGetDown = 8;
+                }
             }
         }
-        if (alienGetDown > 0)
+        if (alienGetDown > 0) {
             alienGetDown -= 1;
+        }
         for (var i = 0; i < this.aliens.length; i++) {
             this.aliens[i].animate(dir);
         }
     };
-    AlienGroup.FIRE_DELAY = 2000.0;
+    AlienGroup.direction = { right: 1, left: -1 };
     return AlienGroup;
 }());
 
