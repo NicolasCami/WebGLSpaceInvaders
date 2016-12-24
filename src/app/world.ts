@@ -130,13 +130,7 @@ class World {
         this.game.scene.add(this.earth);
         this.game.scene.add(this.deathStar);
 
-        this.pad = new Pad({
-          minx : this.x-this.width/2.0,
-          maxx : this.x+this.width/2.0,
-          x : 0.0,
-          y : 0.0,
-          z : 0.0,
-        }, this.game);
+        this.pad = new Pad(this.game, { min: this.x-this.width/2.0, max: this.x+this.width/2.0 });
         this.game.scene.add(this.pad.mesh);
     }
 
@@ -280,11 +274,9 @@ class World {
     }
 
     public padFire() {
-        console.log('pad fire');
         let m = this.pad.fire();
-        if(m) {
+        if(m instanceof Missile) {
           this.missiles.push(m);
-          this.game.scene.add(m.mesh);
         }    
     }
 

@@ -85,13 +85,7 @@ var World = (function () {
         this.earth.rotation.x += 1.2;
         this.game.scene.add(this.earth);
         this.game.scene.add(this.deathStar);
-        this.pad = new Pad({
-            minx: this.x - this.width / 2.0,
-            maxx: this.x + this.width / 2.0,
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
-        }, this.game);
+        this.pad = new Pad(this.game, { min: this.x - this.width / 2.0, max: this.x + this.width / 2.0 });
         this.game.scene.add(this.pad.mesh);
     };
     World.prototype.addBlock = function (block) {
@@ -210,11 +204,9 @@ var World = (function () {
         this.explosions.push(e);
     };
     World.prototype.padFire = function () {
-        console.log('pad fire');
         var m = this.pad.fire();
-        if (m) {
+        if (m instanceof Missile) {
             this.missiles.push(m);
-            this.game.scene.add(m.mesh);
         }
     };
     World.prototype.alienFire = function () {
