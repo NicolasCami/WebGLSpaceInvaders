@@ -46,7 +46,6 @@ var AlienBonus = (function (_super) {
         }
         return true;
     };
-    ;
     AlienBonus.increment = 0.03;
     AlienBonus.steps = { init: 1, move: 2, end: 3 };
     return AlienBonus;

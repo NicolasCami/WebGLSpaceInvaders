@@ -1,46 +1,35 @@
-var Block = (function () {
-    function Block(params) {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Block = (function (_super) {
+    __extends(Block, _super);
+    function Block(game, position) {
+        if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
+        _super.call(this, game, new THREE.Vector3(0.6, 0.6, 1.0), new THREE.Vector3(0.001 + (Math.random() * 0.005), 0.0, 0.0), position);
+        this.orientation = (Math.floor((Math.random() * 2)) > 0) ? Block.orientations.down : Block.orientations.up;
+        this.moveLimit = 0.2;
+        this.init();
+    }
+    Block.prototype.initMesh = function () {
         var mesh = randFromArray(blockData.model).clone();
         mesh.castShadow = true;
         this.mesh = mesh;
-        this.mesh.position.x = typeof params.x !== 'undefined' ? params.x : 0.0;
-        this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 0.0;
-        this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 0.0;
-        this.size = typeof params.size !== 'undefined' ? params.size : { x: 0.6, y: 0.6, z: 1.0 };
-        this.velocity = typeof params.velocity !== 'undefined' ? params.velocity : 0.001 + (Math.random() * 0.005);
-        this.orientation = (Math.floor((Math.random() * 2)) > 0) ? -1 : 1;
-        this.moveLimit = 0.2;
-    }
-    Block.prototype.minX = function () {
-        return this.mesh.position.x - (this.size.x / 2);
-    };
-    Block.prototype.minY = function () {
-        return this.mesh.position.y - (this.size.y / 2);
-    };
-    Block.prototype.minZ = function () {
-        return this.mesh.position.z - (this.size.z / 2);
-    };
-    Block.prototype.maxX = function () {
-        return this.mesh.position.x + (this.size.x / 2);
-    };
-    Block.prototype.maxY = function () {
-        return this.mesh.position.y + (this.size.y / 2);
-    };
-    Block.prototype.maxZ = function () {
-        return this.mesh.position.z + (this.size.z / 2);
     };
     Block.prototype.animate = function () {
-        this.mesh.position.z += this.orientation * this.velocity;
+        this.mesh.position.z += this.orientation * this.velocity.x;
         if (this.mesh.position.z > this.moveLimit) {
             this.mesh.position.z = this.moveLimit;
-            this.orientation = -1;
+            this.orientation = Block.orientations.down;
         }
         else if (this.mesh.position.z < -this.moveLimit) {
             this.mesh.position.z = -this.moveLimit;
-            this.orientation = 1;
+            this.orientation = Block.orientations.up;
         }
     };
+    Block.orientations = { up: 1, down: -1 };
     return Block;
-}());
+}(Game3dObject));
 
 //# sourceMappingURL=block.js.map

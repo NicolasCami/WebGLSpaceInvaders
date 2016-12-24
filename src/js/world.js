@@ -113,13 +113,8 @@ var World = (function () {
         var size = 0.6;
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < (3 - this.level); j++) {
-                var b = new Block({
-                    x: x + (size - 0.01) * i,
-                    y: y + (size - 0.01) * j,
-                    z: Math.random() * 6.0,
-                });
+                var b = new Block(this.game, new THREE.Vector3(x + (size - 0.01) * i, y + (size - 0.01) * j, Math.random() * 6.0));
                 this.addBlock(b);
-                this.game.scene.add(b.mesh);
             }
         }
     };
