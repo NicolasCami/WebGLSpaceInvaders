@@ -5,12 +5,11 @@ class Missile extends Game3dObject {
     invincible: boolean;
     isAlien: boolean;
 
-    constructor(game: Game,
-                invincible: boolean = false,
+    constructor(invincible: boolean = false,
                 isAlien: boolean = false,
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(game, new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, Missile.increment, 0.0), position);
+        super(new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, Missile.increment, 0.0), position);
         
         this.invincible = invincible;
         this.isAlien = isAlien;

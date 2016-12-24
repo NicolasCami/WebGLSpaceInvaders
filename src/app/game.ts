@@ -1,5 +1,7 @@
 class Game {
 
+    private static instance: Game;
+
     // Stats
     stats: Statistics;
 
@@ -27,6 +29,12 @@ class Game {
     Key: Key;
 
     constructor() {
+
+        if(Game.instance){
+            throw new Error("Game is a singleton. Use Game.getInstance() instead.");
+        }
+        Game.instance = this;
+
         this.stats = new Statistics();
 
         this.scene = new THREE.Scene();
@@ -44,7 +52,7 @@ class Game {
         document.body.appendChild( this.renderer.domElement );
         this.initScene();
 
-        this.Key = new Key(this);
+        this.Key = new Key();
 
         this.world = new World({
             x : 0.0,
@@ -52,7 +60,7 @@ class Game {
             z : -1.0,
             width : 20.0,
             height : 30.0,
-        }, this);
+        });
 
         this.menu = new Menu({
             x : 0.0,
@@ -60,7 +68,7 @@ class Game {
             z : 20.0,
             width : 30.0,
             height : 30.0,
-        }, this);
+        });
         
         /**
         PAUSE EVENTS
@@ -84,6 +92,13 @@ class Game {
         setInterval('invincibleGUIEffect()',1300);*/      
 
         this.render();
+    }
+
+    static getInstance() {
+        if (!Game.instance) {
+            Game.instance = new Game();
+        }
+        return Game.instance;
     }
 
     private initCameras() {
@@ -343,4 +358,4 @@ class Game {
 
 }
 
-$(new Function('var game = new Game();'));
+$(new Function('var game = Game.getInstance();'));

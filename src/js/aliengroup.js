@@ -1,8 +1,7 @@
 var AlienGroup = (function () {
-    function AlienGroup(game) {
+    function AlienGroup() {
         this.aliens = [];
         this.aliensBottom = [];
-        this.game = game;
         this.gettingDown = 0;
         this.currentDirection = AlienGroup.direction.right;
     }
@@ -56,12 +55,12 @@ var AlienGroup = (function () {
      */
     AlienGroup.prototype.chooseFiringAlien = function () {
         var x = this.aliensBottom[0];
-        if (this.game.world.getLevel() < 2) {
+        if (Game.getInstance().world.getLevel() < 2) {
             x = randFromArray(this.aliensBottom);
         }
         else {
             for (var i = 1; i < this.aliensBottom.length; i++) {
-                if (Math.abs(this.aliens[this.aliensBottom[i]].getX() - this.game.world.pad.getX()) < Math.abs(this.aliens[x].getX() - this.game.world.pad.getX())) {
+                if (Math.abs(this.aliens[this.aliensBottom[i]].getX() - Game.getInstance().world.pad.getX()) < Math.abs(this.aliens[x].getX() - Game.getInstance().world.pad.getX())) {
                     x = this.aliensBottom[i];
                 }
             }
@@ -81,7 +80,7 @@ var AlienGroup = (function () {
                 else {
                     type = Alien.type.top;
                 }
-                this.addAlien(new Alien(this.game, type, new THREE.Vector3(0.05 + (0.01 * level), 0.0, 0.0), new THREE.Vector3(-5 + j * 2, 20.0 - i * 2, 0.0), -0.1 - (level * 0.02)));
+                this.addAlien(new Alien(type, new THREE.Vector3(0.05 + (0.01 * level), 0.0, 0.0), new THREE.Vector3(-5 + j * 2, 20.0 - i * 2, 0.0), -0.1 - (level * 0.02)));
             }
         }
         this.computeAliensBottom();

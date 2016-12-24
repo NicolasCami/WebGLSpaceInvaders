@@ -138,6 +138,10 @@ var Game = (function () {
             $('.shortcuts').hide();
             $('.invincible').hide();
         };
+        if (Game.instance) {
+            throw new Error("Game is a singleton. Use Game.getInstance() instead.");
+        }
+        Game.instance = this;
         this.stats = new Statistics();
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -151,21 +155,21 @@ var Game = (function () {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.initScene();
-        this.Key = new Key(this);
+        this.Key = new Key();
         this.world = new World({
             x: 0.0,
             y: 6.0,
             z: -1.0,
             width: 20.0,
             height: 30.0,
-        }, this);
+        });
         this.menu = new Menu({
             x: 0.0,
             y: -20.0,
             z: 20.0,
             width: 30.0,
             height: 30.0,
-        }, this);
+        });
         /**
         PAUSE EVENTS
         **/
@@ -187,6 +191,12 @@ var Game = (function () {
         setInterval('invincibleGUIEffect()',1300);*/
         this.render();
     }
+    Game.getInstance = function () {
+        if (!Game.instance) {
+            Game.instance = new Game();
+        }
+        return Game.instance;
+    };
     Game.prototype.initCameras = function () {
         this.camera.position.x = 0.0;
         this.camera.position.y = -2.0;
@@ -286,6 +296,6 @@ var Game = (function () {
     };
     return Game;
 }());
-$(new Function('var game = new Game();'));
+$(new Function('var game = Game.getInstance();'));
 
 //# sourceMappingURL=game.js.map

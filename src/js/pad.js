@@ -5,10 +5,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Pad = (function (_super) {
     __extends(Pad, _super);
-    function Pad(game, positionBounds, position) {
+    function Pad(positionBounds, position) {
         if (positionBounds === void 0) { positionBounds = { min: 0, max: 1 }; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, game, new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
+        _super.call(this, new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
         this.positionBounds = positionBounds;
         this.missileStartPosition = new THREE.Vector3(0.0, 1.0, 0.0);
         this.lastFire = 0;
@@ -99,7 +99,7 @@ var Pad = (function (_super) {
             this.mesh.position.z = point.z;
             this.mesh.rotation.y = (2 * Math.PI * this.curveProgress);
             this.curveProgress += 0.02;
-            this.game.updateCameraPad();
+            Game.getInstance().updateCameraPad();
         }
         else {
             this.mesh.rotation.y = 0;
@@ -116,11 +116,11 @@ var Pad = (function (_super) {
             soundPadFire.play();
             var m = null;
             if (this.missileInvincible) {
-                m = new Missile(this.game, true, false, this.mesh.position.clone().add(this.missileStartPosition));
+                m = new Missile(true, false, this.mesh.position.clone().add(this.missileStartPosition));
                 this.missileInvincible -= 1;
             }
             else {
-                m = new Missile(this.game, false, false, this.mesh.position.clone().add(this.missileStartPosition));
+                m = new Missile(false, false, this.mesh.position.clone().add(this.missileStartPosition));
             }
             if (this.missileFast > 0) {
                 this.missileFast -= 1;
@@ -143,18 +143,18 @@ var Pad = (function (_super) {
                     y: this.mesh.position.y,
                     z: this.mesh.position.z,
                     text: 'MEGA SHOT',
-                }, this.game);
-                this.game.world.scores.push(e);
+                });
+                Game.getInstance().world.scores.push(e);
                 break;
             case Bonus.type.extraLife:
-                this.game.updateLife(this.game.life + 1);
+                Game.getInstance().updateLife(Game.getInstance().life + 1);
                 e = new ScoreAnimation({
                     x: this.mesh.position.x,
                     y: this.mesh.position.y,
                     z: this.mesh.position.z,
                     text: '+1 LIFE',
-                }, this.game);
-                this.game.world.scores.push(e);
+                });
+                Game.getInstance().world.scores.push(e);
                 break;
             default:
                 console.log('Warning: catching unknown bonus. No effect!');

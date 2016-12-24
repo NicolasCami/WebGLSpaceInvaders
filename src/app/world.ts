@@ -34,9 +34,8 @@ class World {
     
     alienGroup: AlienGroup;
     pad: Pad;
-    game: Game;
 
-    constructor(params: any, game: Game) {
+    constructor(params: any) {
         this.missiles = [];
         this.lights = [];
         this.blocks = [];
@@ -53,7 +52,7 @@ class World {
         this.limitY = this.height;
         this.level = 0;
         this.onLevelInit = false;
-        this.alienGroup = new AlienGroup(game);
+        this.alienGroup = new AlienGroup();
         this.LastFire = 0;
         this.lastAlienBonus = 0;
         this.alienBonusDelay = 2000;
@@ -74,7 +73,6 @@ class World {
         this.destructionTimer = Date.now();
         this.destructionDelay = 40000;
         this.earthDestroyed = false;
-        this.game = game;
 
         this.init();
     }
@@ -95,7 +93,7 @@ class World {
         let ground = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, 0.1), groundMaterial);
         ground.position.set(this.x, this.y+2, this.z);
         ground.receiveShadow = true;
-        this.game.scene.add(ground);
+        Game.getInstance().scene.add(ground);
 
         let sphere = new THREE.SphereGeometry( 0.2, 16, 8 );
 
@@ -103,7 +101,7 @@ class World {
         for(let i=0; i<8; i++) {
           let tmp = worldData.limit.clone();
           tmp.position.set(this.x-(this.width/2)+0.5 + i*2.7, this.y-2, this.z+0.2);
-          this.game.scene.add(tmp);
+          Game.getInstance().scene.add(tmp);
         }
 
         missileLight1.position.copy(this.place.position);
@@ -118,22 +116,22 @@ class World {
         this.deathBeamLoad = new THREE.PointLight( 0x00ff00, 2, 20 );
         this.deathBeamLoad.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) ) );
         this.deathBeamLoad.position.set(114, 255, -80);
-        this.game.scene.add( this.deathBeamLoad );
+        Game.getInstance().scene.add( this.deathBeamLoad );
         this.deathBeam = new THREE.PointLight( 0x00ff00, 2, 20 );
         this.deathBeam.add( new THREE.Mesh(new THREE.PlaneGeometry( 1, 5, 5 ), new THREE.MeshBasicMaterial( { color: 0x00ff00 } )) );
         this.deathBeam.position.set(114, 255, -80);
-        this.game.scene.add( this.deathBeam );
+        Game.getInstance().scene.add( this.deathBeam );
 
         this.earth.position.set(-140, 255, -80);
         this.deathStar.position.set(140, 255, -80);
         this.deathStar.rotation.x -= 49;
         this.earth.rotation.x += 1.2;
 
-        this.game.scene.add(this.earth);
-        this.game.scene.add(this.deathStar);
+        Game.getInstance().scene.add(this.earth);
+        Game.getInstance().scene.add(this.deathStar);
 
-        this.pad = new Pad(this.game, { min: this.x-this.width/2.0, max: this.x+this.width/2.0 });
-        this.game.scene.add(this.pad.mesh);
+        this.pad = new Pad({ min: this.x-this.width/2.0, max: this.x+this.width/2.0 });
+        Game.getInstance().scene.add(this.pad.mesh);
     }
 
     public addBlock(block: Block) {
@@ -141,7 +139,7 @@ class World {
     }
 
     public addAlienBonus() {
-        let a = new AlienBonus(this.game);
+        let a = new AlienBonus();
         this.alienBonus.push(a);
     }
 
@@ -158,7 +156,7 @@ class World {
         let size = 0.6;
         for(let i=0; i<4; i++) {
           for(let j=0; j<(3-this.level); j++) {
-            let b = new Block(this.game, new THREE.Vector3(x+(size-0.01)*i, y+(size-0.01)*j, Math.random()*6.0));
+            let b = new Block(Game.getInstance(), new THREE.Vector3(x+(size-0.01)*i, y+(size-0.01)*j, Math.random()*6.0));
             this.addBlock(b);
           }
         }
@@ -177,8 +175,8 @@ class World {
             this.alienGroup.init(5,5,level);
             for(let i= 0; i < this.alienGroup.getLength(); i++) {
               this.alienGroup.get(i).mesh.position.z = Math.random()*6.0;
-              this.game.scene.add(this.alienGroup.get(i).mesh);
-              this.game.scene.add(this.alienGroup.get(i).mesh2);
+              Game.getInstance().scene.add(this.alienGroup.get(i).mesh);
+              Game.getInstance().scene.add(this.alienGroup.get(i).mesh2);
             }
 
             this.initBunkers();
@@ -188,8 +186,8 @@ class World {
             this.alienGroup.init(5,5,level);
             for(let i= 0; i < this.alienGroup.getLength(); i++) {
               this.alienGroup.get(i).mesh.position.z = Math.random()*6.0;
-              this.game.scene.add(this.alienGroup.get(i).mesh);
-              this.game.scene.add(this.alienGroup.get(i).mesh2);
+              Game.getInstance().scene.add(this.alienGroup.get(i).mesh);
+              Game.getInstance().scene.add(this.alienGroup.get(i).mesh2);
             }
 
             this.initBunkers();
@@ -212,39 +210,39 @@ class World {
 
     public clear() {
         for(let j= 0; j < this.blocks.length; j++) {
-          this.game.scene.remove(this.blocks[j].mesh);
+          Game.getInstance().scene.remove(this.blocks[j].mesh);
         }
         this.blocks = [];
 
         for(let j= 0; j < this.alienGroup.aliens.length; j++) {
-          this.game.scene.remove(this.alienGroup.aliens[j].mesh);
-          this.game.scene.remove(this.alienGroup.aliens[j].mesh2);
+          Game.getInstance().scene.remove(this.alienGroup.aliens[j].mesh);
+          Game.getInstance().scene.remove(this.alienGroup.aliens[j].mesh2);
         }
         this.alienGroup.aliens = [];
 
         for(let j= 0; j < this.alienBonus.length; j++) {
-          this.game.scene.remove(this.alienBonus[j].mesh);
-          this.game.scene.remove(this.alienBonus[j].mesh2);
+          Game.getInstance().scene.remove(this.alienBonus[j].mesh);
+          Game.getInstance().scene.remove(this.alienBonus[j].mesh2);
         }
         this.alienBonus = [];
 
         for(let j= 0; j < this.bonus.length; j++) {
-          this.game.scene.remove(this.bonus[j].mesh);
+          Game.getInstance().scene.remove(this.bonus[j].mesh);
         }
         this.bonus = [];
 
         for(let j= 0; j < this.missiles.length; j++) {
-          this.game.scene.remove(this.missiles[j].mesh);
+          Game.getInstance().scene.remove(this.missiles[j].mesh);
         }
         this.missiles = [];
 
         for(let j= 0; j < this.explosions.length; j++) {
-          this.game.scene.remove(this.explosions[j].mesh);
+          Game.getInstance().scene.remove(this.explosions[j].mesh);
         }
         this.explosions = [];
 
         for(let j= 0; j < this.scores.length; j++) {
-          this.game.scene.remove(this.scores[j].mesh);
+          Game.getInstance().scene.remove(this.scores[j].mesh);
         }
         this.scores = [];
 
@@ -255,10 +253,10 @@ class World {
     public killThemAll() {
         for(let j= 0; j < this.alienGroup.getLength(); j++) {
           soundAlienExplosion.play();
-          let e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, this.alienGroup.get(j).mesh.position.clone());
+          let e = new Explosion(1.5, 50, 0.4, 0xff0000, this.alienGroup.get(j).mesh.position.clone());
           this.explosions.push(e);
-          this.game.scene.remove(this.alienGroup.get(j).mesh);
-          this.game.scene.remove(this.alienGroup.get(j).mesh2);
+          Game.getInstance().scene.remove(this.alienGroup.get(j).mesh);
+          Game.getInstance().scene.remove(this.alienGroup.get(j).mesh2);
         }
         this.alienGroup.aliens = [];
     }
@@ -271,7 +269,7 @@ class World {
     }
 
     public killPad() {
-        let e = new Explosion(this.game, 1.5, 100, 0.5, 0x2FA1D6, this.pad.mesh.position.clone());
+        let e = new Explosion(1.5, 100, 0.5, 0x2FA1D6, this.pad.mesh.position.clone());
         this.explosions.push(e);
     }
 
@@ -286,20 +284,20 @@ class World {
         let m = this.alienGroup.fire();
         if(m instanceof Missile) {
             this.missiles.push(m);
-            this.game.scene.add(m.mesh);
+            Game.getInstance().scene.add(m.mesh);
             this.updateMissileLights();
         }
     }
 
     public removeMissile(i: number) {
-        this.game.scene.remove(this.missiles[i].mesh);
+        Game.getInstance().scene.remove(this.missiles[i].mesh);
         this.missiles.splice(i, 1);
         this.updateMissileLights();
     }
 
     public removeAlien(i: number) {
-        this.game.scene.remove(this.alienGroup.get(i).mesh);
-        this.game.scene.remove(this.alienGroup.get(i).mesh2);
+        Game.getInstance().scene.remove(this.alienGroup.get(i).mesh);
+        Game.getInstance().scene.remove(this.alienGroup.get(i).mesh2);
         this.alienGroup.remove(i);
     }
 
@@ -330,7 +328,7 @@ class World {
             this.earth.visible= false;
             this.earthDestroyed = true;
             this.deathBeamLoad.visible = false;
-            let e = new Explosion(this.game, 100, 200, 10, 0x354696, this.earth.position.clone());
+            let e = new Explosion(100, 200, 10, 0x354696, this.earth.position.clone());
             this.explosions.push(e);
           }
         }else{
@@ -370,15 +368,15 @@ class World {
           let missilePadTouch = false;
           
           // animate pad
-          if(this.game.Key.isDown(Key.LEFT)) {
+          if(Game.getInstance().Key.isDown(Key.LEFT)) {
             this.pad.left();
-            this.game.updateCameraPad();
+            Game.getInstance().updateCameraPad();
           }
-          if(this.game.Key.isDown(Key.RIGHT)) {
+          if(Game.getInstance().Key.isDown(Key.RIGHT)) {
             this.pad.right();
-            this.game.updateCameraPad();
+            Game.getInstance().updateCameraPad();
           }
-          if(this.game.Key.isDown(Key.SPACE)) this.padFire();
+          if(Game.getInstance().Key.isDown(Key.SPACE)) this.padFire();
           
           // animate pad
           this.pad.animate();
@@ -405,8 +403,8 @@ class World {
           // alien bonus
           for(let i= 0; i < this.alienBonus.length; i++) {
              if(this.alienBonus[i].animate() == false) {
-              this.game.scene.remove(this.alienBonus[i].mesh);
-              this.game.scene.remove(this.alienBonus[i].mesh2);
+              Game.getInstance().scene.remove(this.alienBonus[i].mesh);
+              Game.getInstance().scene.remove(this.alienBonus[i].mesh2);
               this.alienBonus.splice(i, 1);
              }
           }
@@ -420,7 +418,7 @@ class World {
           for(let i= 0; i < this.missiles.length; i++) {
              if(this.missiles[i].mesh.position.y > this.limitY || this.missiles[i].mesh.position.y < -3.0) {
               // kill missile
-              this.game.scene.remove(this.missiles[i].mesh);
+              Game.getInstance().scene.remove(this.missiles[i].mesh);
               this.missiles.splice(i, 1);
               i--;
              }
@@ -430,7 +428,7 @@ class World {
           for(let i= 0; i < this.explosions.length; i++) {
              if(this.explosions[i].animate()) {
               // explosion end
-              this.game.scene.remove(this.explosions[i].mesh);
+              Game.getInstance().scene.remove(this.explosions[i].mesh);
               this.explosions.splice(i, 1);
               i--;
               break;
@@ -441,7 +439,7 @@ class World {
           for(let i= 0; i < this.scores.length; i++) {
              if(this.scores[i].animate()) {
               // score end
-              this.game.scene.remove(this.scores[i].mesh);
+              Game.getInstance().scene.remove(this.scores[i].mesh);
               this.scores.splice(i, 1);
               i--;
               break;
@@ -452,7 +450,7 @@ class World {
           for(let i= 0; i < this.bonus.length; i++) {
              if(this.bonus[i].animate()) {
               // bonus end
-              this.game.scene.remove(this.bonus[i].mesh);
+              Game.getInstance().scene.remove(this.bonus[i].mesh);
               this.bonus.splice(i, 1);
               i--;
               break;
@@ -468,20 +466,20 @@ class World {
                 //console.log('missile collision avec alien');
                 // explosion
                 soundAlienExplosion.play();
-                e = new Explosion(this.game, 1.5, 50, 0.4, alien.explosionColor, alien.mesh.position.clone());
+                e = new Explosion(1.5, 50, 0.4, alien.explosionColor, alien.mesh.position.clone());
                 this.explosions.push(e);
                 // score
-                this.game.updateScore(alien.getScore());
+                Game.getInstance().updateScore(alien.getScore());
                 let s = new ScoreAnimation({
                   x : alien.mesh.position.x,
                   y : alien.mesh.position.y,
                   z : alien.mesh.position.z,
                   text : '+' + alien.getScore(),
-                }, this.game);
+                });
                 this.scores.push(s);
                 // bonus
                 if(Math.random() < World.bonusRate) {
-                  let b = new Bonus(this.game, Math.floor((Math.random()*2)+1), new THREE.Vector3(alien.mesh.position.x, alien.mesh.position.y, alien.mesh.position.z));
+                  let b = new Bonus(Math.floor((Math.random()*2)+1), new THREE.Vector3(alien.mesh.position.x, alien.mesh.position.y, alien.mesh.position.z));
                   this.bonus.push(b);
                 }
                 // kill alien
@@ -502,20 +500,20 @@ class World {
                 let alien = this.alienBonus[j];
                 // explosion
                 soundAlienExplosion.play();
-                e = new Explosion(this.game, 1.5, 50, 0.4, 0xff0000, alien.mesh.position.clone());
+                e = new Explosion(1.5, 50, 0.4, 0xff0000, alien.mesh.position.clone());
                 this.explosions.push(e);
                 // score
-                this.game.updateScore(alien.getScore());
+                Game.getInstance().updateScore(alien.getScore());
                 let s = new ScoreAnimation({
                   x : alien.mesh.position.x,
                   y : alien.mesh.position.y,
                   z : alien.mesh.position.z,
                   text : '+' + alien.getScore(),
-                }, this.game);
+                });
                 this.scores.push(s);
                 // kill alien
-                this.game.scene.remove(alien.mesh);
-                this.game.scene.remove(alien.mesh2);
+                Game.getInstance().scene.remove(alien.mesh);
+                Game.getInstance().scene.remove(alien.mesh2);
                 this.alienBonus.splice(j, 1);
                 // kill missile
                 if(!this.missiles[i].isInvincible()) {
@@ -532,14 +530,14 @@ class World {
             for(let i= 0; i < this.missiles.length; i++) {
               if(boxCollision(this.missiles[i],this.pad)) {
                 soundPadExplosion.play();
-                this.game.updateLife(this.game.life-1);
+                Game.getInstance().updateLife(Game.getInstance().life-1);
                 this.removeMissile(i);
                 this.killPad();
                 i--;
-                if(this.game.life <= 0) {
+                if(Game.getInstance().life <= 0) {
                   this.pad.mesh.visible = false;
                   setTimeout(function () {
-                    this.game.lose();
+                    Game.getInstance().lose();
                   }.bind(this), 500);
                 }
               }
@@ -548,7 +546,7 @@ class World {
           
           // check if aliens have reach the player
           if(this.alienGroup.onBottom() < 4.5) {
-            this.game.lose();
+            Game.getInstance().lose();
           }
 
           // check block collision
@@ -560,10 +558,10 @@ class World {
                 }
                 // explosion
                 soundBlockExplosion.play();
-                e = new Explosion(this.game, 1.5, 30, 0.2, 0x22dd33, this.blocks[j].mesh.position.clone());
+                e = new Explosion(1.5, 30, 0.2, 0x22dd33, this.blocks[j].mesh.position.clone());
                 this.explosions.push(e);
                 // kill block
-                this.game.scene.remove(this.blocks[j].mesh);
+                Game.getInstance().scene.remove(this.blocks[j].mesh);
                 this.blocks.splice(j, 1);
                 // kill missile
                 if(!this.missiles[i].isInvincible()) {
@@ -582,10 +580,10 @@ class World {
               // give bonus to pad
               this.pad.addBonus(this.bonus[i]);
               // explosion
-              e = new Explosion(this.game, 1.5, 30, 0.2, 0x22dd33, this.pad.mesh.position.clone());
+              e = new Explosion(1.5, 30, 0.2, 0x22dd33, this.pad.mesh.position.clone());
               this.explosions.push(e);
               // kill bonus
-              this.game.scene.remove(this.bonus[i].mesh);
+              Game.getInstance().scene.remove(this.bonus[i].mesh);
               this.bonus.splice(i, 1);
             }
           }

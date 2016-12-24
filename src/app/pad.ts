@@ -19,11 +19,10 @@ class Pad extends Game3dObject {
     curve: THREE.QuadraticBezierCurve3;
     curveProgress: number;
 
-    constructor(game: Game,
-                positionBounds: any = { min: 0, max: 1 },
+    constructor(positionBounds: any = { min: 0, max: 1 },
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(game, new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
+        super(new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
         
         this.positionBounds = positionBounds;
         this.missileStartPosition = new THREE.Vector3(0.0, 1.0, 0.0);
@@ -124,7 +123,7 @@ class Pad extends Game3dObject {
           this.mesh.position.z = point.z;
           this.mesh.rotation.y = (2*Math.PI * this.curveProgress);
           this.curveProgress += 0.02;
-          this.game.updateCameraPad();
+          Game.getInstance().updateCameraPad();
         }
         else {
           this.mesh.rotation.y = 0;
@@ -144,11 +143,11 @@ class Pad extends Game3dObject {
           soundPadFire.play();
           var m = null;
           if(this.missileInvincible) {
-            m = new Missile(this.game, true, false, this.mesh.position.clone().add(this.missileStartPosition));
+            m = new Missile(true, false, this.mesh.position.clone().add(this.missileStartPosition));
             this.missileInvincible -= 1;
           }
           else {
-            m = new Missile(this.game, false, false, this.mesh.position.clone().add(this.missileStartPosition));
+            m = new Missile(false, false, this.mesh.position.clone().add(this.missileStartPosition));
           }
           if(this.missileFast > 0) {
             this.missileFast -= 1;
@@ -174,19 +173,19 @@ class Pad extends Game3dObject {
                   y : this.mesh.position.y,
                   z : this.mesh.position.z,
                   text : 'MEGA SHOT',
-                }, this.game);
-                this.game.world.scores.push(e);
+                });
+                Game.getInstance().world.scores.push(e);
                 break;
 
             case Bonus.type.extraLife:
-                this.game.updateLife(this.game.life+1);
+                Game.getInstance().updateLife(Game.getInstance().life+1);
                 e = new ScoreAnimation({
                   x : this.mesh.position.x,
                   y : this.mesh.position.y,
                   z : this.mesh.position.z,
                   text : '+1 LIFE',
-                }, this.game);
-                this.game.world.scores.push(e);
+                });
+                Game.getInstance().world.scores.push(e);
                 break;
 
             default:

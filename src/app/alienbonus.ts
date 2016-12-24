@@ -5,8 +5,8 @@ class AlienBonus extends Alien {
 
     step: number;
 
-    constructor(game: Game) {
-        super(game, Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
+    constructor() {
+        super(Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
 
         this.step = AlienBonus.steps.init;
     }

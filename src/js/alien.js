@@ -5,17 +5,17 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Alien = (function (_super) {
     __extends(Alien, _super);
-    function Alien(game, type, velocity, position, missileVelocity) {
+    function Alien(type, velocity, position, missileVelocity) {
         if (type === void 0) { type = Alien.type.top; }
         if (velocity === void 0) { velocity = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (missileVelocity === void 0) { missileVelocity = -1.0; }
-        _super.call(this, game, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
+        _super.call(this, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
         this.getScore = function () {
             return this.score;
         };
         this.fire = function () {
-            return new Missile(this.game, false, true, new THREE.Vector3(this.mesh.position.x - this.missileX, this.mesh.position.y - this.missileY, this.mesh.position.z - this.missileZ));
+            return new Missile(false, true, new THREE.Vector3(this.mesh.position.x - this.missileX, this.mesh.position.y - this.missileY, this.mesh.position.z - this.missileZ));
         };
         this.type = type;
         this.lastMeshSwitch = 0;
@@ -25,7 +25,7 @@ var Alien = (function (_super) {
         this.missileVelocity = missileVelocity;
         this.init();
         this.mesh2.position.copy(this.initialPosition);
-        this.game.scene.add(this.mesh2);
+        Game.getInstance().scene.add(this.mesh2);
     }
     Alien.prototype.initMesh = function () {
         switch (this.type) {

@@ -17,7 +17,6 @@ class Sound {
         this.audio.volume = volume;
     }
 
-
     public play() {
       if(sound){
         this.audio.load();

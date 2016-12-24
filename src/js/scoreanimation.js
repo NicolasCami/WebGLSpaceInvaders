@@ -1,5 +1,5 @@
 var ScoreAnimation = (function () {
-    function ScoreAnimation(params, game) {
+    function ScoreAnimation(params) {
         this.time = Date.now();
         this.vx = typeof params.vx !== 'undefined' ? params.vx : 0.0;
         this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
@@ -23,8 +23,7 @@ var ScoreAnimation = (function () {
         this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 0.0;
         this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 0.0;
         this.mesh.rotation.x = Math.PI / 2;
-        this.game = game;
-        this.game.scene.add(this.mesh);
+        Game.getInstance().scene.add(this.mesh);
     }
     ScoreAnimation.prototype.animate = function () {
         this.mesh.position.x += this.vx;

@@ -7,7 +7,7 @@ var Block = (function (_super) {
     __extends(Block, _super);
     function Block(game, position) {
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, game, new THREE.Vector3(0.6, 0.6, 1.0), new THREE.Vector3(0.001 + (Math.random() * 0.005), 0.0, 0.0), position);
+        _super.call(this, new THREE.Vector3(0.6, 0.6, 1.0), new THREE.Vector3(0.001 + (Math.random() * 0.005), 0.0, 0.0), position);
         this.orientation = (Math.floor((Math.random() * 2)) > 0) ? Block.orientations.down : Block.orientations.up;
         this.moveLimit = 0.2;
         this.init();

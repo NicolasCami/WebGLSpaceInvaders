@@ -6,17 +6,14 @@ abstract class Game3dObject {
     velocity: THREE.Vector3;
     initialPosition: THREE.Vector3;
     mesh: THREE.Mesh | THREE.PointCloud;
-    game: Game;
 
-    constructor(game: Game,
-                size: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
+    constructor(size: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 velocity: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
         this.size = size;
         this.velocity = velocity;
         this.initialPosition = position;
-        this.game = game;
 
     }
 
@@ -24,7 +21,7 @@ abstract class Game3dObject {
         this.initMesh();
         this.mesh.position.copy(this.initialPosition);
 
-        this.game.scene.add(this.mesh);
+        Game.getInstance().scene.add(this.mesh);
     }
 
     abstract initMesh();

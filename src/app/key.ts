@@ -7,17 +7,14 @@ class Key {
     static SPACE = 32;
 
     _pressed: any;
-    game: Game;
 
-    constructor(game: Game) {
+    constructor() {
         this._pressed = {};
-
-        this.game = game;
 
         window.addEventListener('keyup', function(event) { this.onKeyup(event); }.bind(this), false);
         window.addEventListener('keydown', function(event) { this.onKeydown(event); }.bind(this), false);
-        window.addEventListener('click', function(event) { this.game.menu.mouseClick(event); }.bind(this), false);
-        window.addEventListener('mousemove', function(event) { this.game.menu.mouseMove(event); }.bind(this), false);
+        window.addEventListener('click', function(event) { Game.getInstance().menu.mouseClick(event); }.bind(this), false);
+        window.addEventListener('mousemove', function(event) { Game.getInstance().menu.mouseMove(event); }.bind(this), false);
     }
 
     public isDown(keyCode: number): boolean {
@@ -26,35 +23,35 @@ class Key {
 
     public onKeydown(event) {
         this._pressed[event.keyCode] = true;
-        if(!this.game.pause) {
+        if(!Game.getInstance().pause) {
             if(event.key == "0") {
-                this.game.currentCamera = 0;
+                Game.getInstance().currentCamera = 0;
             }
             if(event.key == "1") {
-                this.game.currentCamera = 1;
+                Game.getInstance().currentCamera = 1;
             }
             if(event.keyCode == 75) {
-                this.game.world.killThemAll();
+                Game.getInstance().world.killThemAll();
             }
             if(event.keyCode == 73) {
-                this.game.world.invinciblePad();
-                //this.game.invincibleGUI();
+                Game.getInstance().world.invinciblePad();
+                //Game.getInstance().invincibleGUI();
             }
             if(event.keyCode == 72) {
-                this.game.help();
+                Game.getInstance().help();
             }
             if(event.keyCode == 27) {
-                this.game.pauseOn();
+                Game.getInstance().pauseOn();
             }
         }
         else {
             if(event.keyCode == 27) {
-                this.game.pauseOff();
+                Game.getInstance().pauseOff();
             }
         }
 
         if(event.keyCode == 77) {
-            this.game.musicOnOff();
+            Game.getInstance().musicOnOff();
         }
     }
 

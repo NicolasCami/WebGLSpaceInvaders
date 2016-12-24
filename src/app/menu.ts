@@ -18,9 +18,8 @@ class Menu {
     caster: THREE.Raycaster;
     aliens: THREE.Mesh[];
     scores: THREE.Mesh[];
-    game: Game;
 
-    constructor(params: any, game: Game) {
+    constructor(params: any) {
         this.x = typeof params.x !== 'undefined' ? params.x : 0.0;
         this.y = typeof params.y !== 'undefined' ? params.y : 0.0;
         this.z = typeof params.z !== 'undefined' ? params.z : 0.0;
@@ -30,7 +29,6 @@ class Menu {
         this.caster = new THREE.Raycaster();
         this.aliens = [];
         this.scores = [];
-        this.game = game;
 
         this.init();
     }
@@ -40,7 +38,7 @@ class Menu {
 
         this.play = new THREE.Mesh(new THREE.BoxGeometry(this.width/2, this.height/2, 1), Menu.playMaterialNotOver);
         this.play.position.set(this.x, this.y+5, this.z);
-        this.game.scene.add(this.play);
+        Game.getInstance().scene.add(this.play);
 
         var textPlay = textMesh({
           text:'PLAY !',
@@ -51,7 +49,7 @@ class Menu {
         });
         textPlay.position.set(this.x, this.y+7, this.z-1);
         textPlay.rotation.x = Math.PI;
-        this.game.scene.add(textPlay);
+        Game.getInstance().scene.add(textPlay);
 
         var textTitle = textMesh({
           text:'SPACE INVADERS',
@@ -62,7 +60,7 @@ class Menu {
         });
         textTitle.position.set(this.x, this.y-10, this.z);
         textTitle.rotation.x = Math.PI;
-        this.game.scene.add(textTitle);
+        Game.getInstance().scene.add(textTitle);
 
         this.aliens.push(alienData.type[2].modelMenu.clone());
         this.aliens.push(alienData.type[1].modelMenu.clone());
@@ -71,7 +69,7 @@ class Menu {
         for(var i=0; i<this.aliens.length; i++) {
           this.aliens[i].position.set(-5 + (i*3), -9, 10.5);
           this.aliens[i].rotation.x = Math.PI;
-          this.game.scene.add(this.aliens[i]);
+          Game.getInstance().scene.add(this.aliens[i]);
         };
 
         this.scores.push(textMesh({
@@ -105,19 +103,19 @@ class Menu {
         for(var i=0; i<this.scores.length; i++) {
           this.scores[i].position.set(-6 + (i*3.7), -9, 11.2);
           this.scores[i].rotation.x = Math.PI+(Math.PI/2);
-          this.game.scene.add(this.scores[i]);
+          Game.getInstance().scene.add(this.scores[i]);
         };
 
         // set camera focus on menu
-        this.game.currentCamera = 0;
-        this.game.camera.rotation.x = Math.PI+Math.PI/3;
+        Game.getInstance().currentCamera = 0;
+        Game.getInstance().camera.rotation.x = Math.PI+Math.PI/3;
     }
 
     public mouseMove(event) {
         var mouse = new THREE.Vector2();
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-        this.caster.setFromCamera( mouse, this.game.camera );
+        this.caster.setFromCamera( mouse, Game.getInstance().camera );
         var intersects = this.caster.intersectObject(this.play);
             if(intersects.length > 0) {
                 this.play.material = Menu.playMaterialOver;
@@ -133,10 +131,10 @@ class Menu {
         var mouse = new THREE.Vector2();
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-        this.caster.setFromCamera( mouse, this.game.camera );
+        this.caster.setFromCamera( mouse, Game.getInstance().camera );
         var intersects = this.caster.intersectObject(this.play);
         if(intersects.length > 0) {
-            this.game.newGame();
+            Game.getInstance().newGame();
         }
     }
 }

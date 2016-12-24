@@ -8,7 +8,7 @@ class Block extends Game3dObject {
     constructor(game: Game,
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(game, new THREE.Vector3(0.6, 0.6, 1.0), new THREE.Vector3(0.001 + (Math.random()*0.005), 0.0, 0.0), position);
+        super(new THREE.Vector3(0.6, 0.6, 1.0), new THREE.Vector3(0.001 + (Math.random()*0.005), 0.0, 0.0), position);
         
         this.orientation = (Math.floor((Math.random()*2)) > 0) ? Block.orientations.down : Block.orientations.up;
         this.moveLimit = 0.2;

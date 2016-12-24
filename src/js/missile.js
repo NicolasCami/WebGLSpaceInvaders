@@ -5,11 +5,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Missile = (function (_super) {
     __extends(Missile, _super);
-    function Missile(game, invincible, isAlien, position) {
+    function Missile(invincible, isAlien, position) {
         if (invincible === void 0) { invincible = false; }
         if (isAlien === void 0) { isAlien = false; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, game, new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, Missile.increment, 0.0), position);
+        _super.call(this, new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, Missile.increment, 0.0), position);
         this.invincible = invincible;
         this.isAlien = isAlien;
         this.init();

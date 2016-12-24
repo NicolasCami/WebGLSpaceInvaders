@@ -5,8 +5,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var AlienBonus = (function (_super) {
     __extends(AlienBonus, _super);
-    function AlienBonus(game) {
-        _super.call(this, game, Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
+    function AlienBonus() {
+        _super.call(this, Alien.type.bonus, new THREE.Vector3(AlienBonus.increment, 0.0, AlienBonus.increment), new THREE.Vector3(10.0, 21.0, 10.0));
         this.step = AlienBonus.steps.init;
     }
     /**

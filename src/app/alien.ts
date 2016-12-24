@@ -14,13 +14,12 @@ class Alien extends Game3dObject {
     explosionColor: number;
     mesh2: THREE.Mesh;
 
-    constructor(game: Game,
-                type: number = Alien.type.top,
+    constructor(type: number = Alien.type.top,
                 velocity: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 missileVelocity: number = -1.0) {
 
-        super(game, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
+        super(new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
         
         this.type = type;
         this.lastMeshSwitch = 0;
@@ -32,7 +31,7 @@ class Alien extends Game3dObject {
         this.init();
 
         this.mesh2.position.copy(this.initialPosition);
-        this.game.scene.add(this.mesh2);
+        Game.getInstance().scene.add(this.mesh2);
     }
 
     public initMesh() {
@@ -103,6 +102,6 @@ class Alien extends Game3dObject {
     }
 
     public fire = function() : Missile {
-        return new Missile(this.game, false, true, new THREE.Vector3(this.mesh.position.x - this.missileX, this.mesh.position.y - this.missileY, this.mesh.position.z - this.missileZ));
+        return new Missile(false, true, new THREE.Vector3(this.mesh.position.x - this.missileX, this.mesh.position.y - this.missileY, this.mesh.position.z - this.missileZ));
     }
 }

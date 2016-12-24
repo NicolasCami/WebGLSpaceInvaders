@@ -1,5 +1,5 @@
 var Game3dObject = (function () {
-    function Game3dObject(game, size, velocity, position) {
+    function Game3dObject(size, velocity, position) {
         if (size === void 0) { size = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (velocity === void 0) { velocity = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
@@ -30,12 +30,11 @@ var Game3dObject = (function () {
         this.size = size;
         this.velocity = velocity;
         this.initialPosition = position;
-        this.game = game;
     }
     Game3dObject.prototype.init = function () {
         this.initMesh();
         this.mesh.position.copy(this.initialPosition);
-        this.game.scene.add(this.mesh);
+        Game.getInstance().scene.add(this.mesh);
     };
     Game3dObject.prototype.animate = function () {
         this.mesh.position.add(this.velocity);

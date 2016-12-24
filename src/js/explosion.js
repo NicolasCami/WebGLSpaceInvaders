@@ -5,13 +5,13 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Explosion = (function (_super) {
     __extends(Explosion, _super);
-    function Explosion(game, particleCloudSize, particleNb, particleSize, particleColor, position) {
+    function Explosion(particleCloudSize, particleNb, particleSize, particleColor, position) {
         if (particleCloudSize === void 0) { particleCloudSize = 1.0; }
         if (particleNb === void 0) { particleNb = 10; }
         if (particleSize === void 0) { particleSize = 0.1; }
         if (particleColor === void 0) { particleColor = 0xff0000; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, game, new THREE.Vector3(particleCloudSize, particleCloudSize, particleCloudSize), new THREE.Vector3(0.0, 0.0, 0.0), position);
+        _super.call(this, new THREE.Vector3(particleCloudSize, particleCloudSize, particleCloudSize), new THREE.Vector3(0.0, 0.0, 0.0), position);
         this.particleCloudSize = particleCloudSize;
         this.particleNb = particleNb;
         this.particleSize = particleSize;

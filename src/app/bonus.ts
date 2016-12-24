@@ -5,11 +5,10 @@ class Bonus extends Game3dObject {
 
     type: number;
 
-    constructor(game: Game,
-                type: number = 1,
+    constructor(type: number = 1,
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(game, new THREE.Vector3(0.8, 0.8, 1.0), new THREE.Vector3(0.0, -Bonus.increment, 0.0), position);
+        super(new THREE.Vector3(0.8, 0.8, 1.0), new THREE.Vector3(0.0, -Bonus.increment, 0.0), position);
         
         this.type = type;
 
