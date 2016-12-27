@@ -470,12 +470,7 @@ class World {
                 this.explosions.push(e);
                 // score
                 Game.getInstance().updateScore(alien.getScore());
-                let s = new ScoreAnimation({
-                  x : alien.mesh.position.x,
-                  y : alien.mesh.position.y,
-                  z : alien.mesh.position.z,
-                  text : '+' + alien.getScore(),
-                });
+                let s = new ScoreAnimation('+' + alien.getScore(), alien.mesh.position.clone());
                 this.scores.push(s);
                 // bonus
                 if(Math.random() < World.bonusRate) {
@@ -504,12 +499,7 @@ class World {
                 this.explosions.push(e);
                 // score
                 Game.getInstance().updateScore(alien.getScore());
-                let s = new ScoreAnimation({
-                  x : alien.mesh.position.x,
-                  y : alien.mesh.position.y,
-                  z : alien.mesh.position.z,
-                  text : '+' + alien.getScore(),
-                });
+                let s = new ScoreAnimation('+' + alien.getScore(), alien.mesh.position.clone());
                 this.scores.push(s);
                 // kill alien
                 Game.getInstance().scene.remove(alien.mesh);

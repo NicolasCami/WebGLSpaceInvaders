@@ -168,23 +168,13 @@ class Pad extends Game3dObject {
         switch(bonus.getType()) {
             case Bonus.type.superMissile:
                 this.missileInvincible += 1;
-                e = new ScoreAnimation({
-                  x : this.mesh.position.x,
-                  y : this.mesh.position.y,
-                  z : this.mesh.position.z,
-                  text : 'MEGA SHOT',
-                });
+                e = new ScoreAnimation('MEGA SHOT', this.mesh.position.clone());
                 Game.getInstance().world.scores.push(e);
                 break;
 
             case Bonus.type.extraLife:
                 Game.getInstance().updateLife(Game.getInstance().life+1);
-                e = new ScoreAnimation({
-                  x : this.mesh.position.x,
-                  y : this.mesh.position.y,
-                  z : this.mesh.position.z,
-                  text : '+1 LIFE',
-                });
+                e = new ScoreAnimation('+1 LIFE', this.mesh.position.clone());
                 Game.getInstance().world.scores.push(e);
                 break;
 

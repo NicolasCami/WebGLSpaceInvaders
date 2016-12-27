@@ -1,11 +1,21 @@
-var ScoreAnimation = (function () {
-    function ScoreAnimation(params) {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var ScoreAnimation = (function (_super) {
+    __extends(ScoreAnimation, _super);
+    function ScoreAnimation(text, position, width) {
+        if (text === void 0) { text = ''; }
+        if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
+        if (width === void 0) { width = 5; }
+        _super.call(this, new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, 0.0, ScoreAnimation.INCREMENT), position);
         this.time = Date.now();
-        this.vx = typeof params.vx !== 'undefined' ? params.vx : 0.0;
-        this.vy = typeof params.vy !== 'undefined' ? params.vy : 0.0;
-        this.vz = typeof params.vz !== 'undefined' ? params.vz : ScoreAnimation.INCREMENT;
-        this.text = typeof params.text !== 'undefined' ? params.text : '';
-        this.width = typeof params.width !== 'undefined' ? params.width : 5;
+        this.text = text;
+        this.width = width;
+        this.init();
+    }
+    ScoreAnimation.prototype.initMesh = function () {
         if (this.text in textData) {
             this.mesh = textData[this.text].clone();
         }
@@ -19,16 +29,10 @@ var ScoreAnimation = (function () {
             });
             this.mesh = textData[this.text].clone();
         }
-        this.mesh.position.x = typeof params.x !== 'undefined' ? params.x : 0.0;
-        this.mesh.position.y = typeof params.y !== 'undefined' ? params.y : 0.0;
-        this.mesh.position.z = typeof params.z !== 'undefined' ? params.z : 0.0;
         this.mesh.rotation.x = Math.PI / 2;
-        Game.getInstance().scene.add(this.mesh);
-    }
+    };
     ScoreAnimation.prototype.animate = function () {
-        this.mesh.position.x += this.vx;
-        this.mesh.position.y += this.vy;
-        this.mesh.position.z += this.vz;
+        this.mesh.position.add(this.velocity);
         this.mesh.rotation.z += 0.1;
         if (this.time + ScoreAnimation.LIFE_TIME < Date.now()) {
             return true;
@@ -36,11 +40,11 @@ var ScoreAnimation = (function () {
         return false;
     };
     ScoreAnimation.prototype.getDirection = function () {
-        return new THREE.Vector3(this.vx, this.vy, this.vz);
+        return this.velocity;
     };
     ScoreAnimation.INCREMENT = 0.05;
     ScoreAnimation.LIFE_TIME = 2000.0;
     return ScoreAnimation;
-}());
+}(Game3dObject));
 
 //# sourceMappingURL=scoreanimation.js.map

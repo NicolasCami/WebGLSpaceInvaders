@@ -40,11 +40,11 @@ class Missile extends Game3dObject {
         this.mesh.position.add(this.velocity);
     }
 
-    public getDirection() {
+    public getDirection() : THREE.Vector3 {
         return this.velocity.clone();
     }
     
-    public isInvincible() {
+    public isInvincible() : boolean {
         return this.invincible;
     }
 
