@@ -155,7 +155,6 @@ var Game = (function () {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.initScene();
-        this.Key = new Key();
         this.world = new World({
             x: 0.0,
             y: 6.0,

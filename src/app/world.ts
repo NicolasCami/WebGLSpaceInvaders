@@ -368,15 +368,15 @@ class World {
           let missilePadTouch = false;
           
           // animate pad
-          if(Game.getInstance().Key.isDown(Key.LEFT)) {
+          if(Key.getInstance().isDown(Key.keyCode.left)) {
             this.pad.left();
             Game.getInstance().updateCameraPad();
           }
-          if(Game.getInstance().Key.isDown(Key.RIGHT)) {
+          if(Key.getInstance().isDown(Key.keyCode.right)) {
             this.pad.right();
             Game.getInstance().updateCameraPad();
           }
-          if(Game.getInstance().Key.isDown(Key.SPACE)) this.padFire();
+          if(Key.getInstance().isDown(Key.keyCode.space)) this.padFire();
           
           // animate pad
           this.pad.animate();
