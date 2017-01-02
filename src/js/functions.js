@@ -1,8 +1,3 @@
-function boxCollision(a, b) {
-    return (a.maxX() >= b.minX() && a.minX() <= b.maxX())
-        && (a.maxY() >= b.minY() && a.minY() <= b.maxY())
-        && (a.maxZ() >= b.minZ() && a.minZ() <= b.maxZ());
-}
 function loadModel(params) {
     var filePath = typeof params.filePath !== 'undefined' ? params.filePath : '';
     var encoding = typeof params.encoding !== 'undefined' ? params.encoding : 'UTF-8';

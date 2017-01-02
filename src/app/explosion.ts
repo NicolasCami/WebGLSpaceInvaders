@@ -16,7 +16,7 @@ class Explosion extends Game3dObject {
                 particleColor : number = 0xff0000,
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(new THREE.Vector3(particleCloudSize, particleCloudSize, particleCloudSize), new THREE.Vector3(0.0, 0.0, 0.0), position);
+        super(new THREE.Vector3(0.0, 0.0, 0.0), position);
         
         this.particleCloudSize = particleCloudSize;
         this.particleNb = particleNb;

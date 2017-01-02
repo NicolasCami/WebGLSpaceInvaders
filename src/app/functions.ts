@@ -1,11 +1,4 @@
-
-function boxCollision(a, b) {
-  return (a.maxX() >= b.minX() && a.minX() <= b.maxX())
-    && (a.maxY() >= b.minY() && a.minY() <= b.maxY())
-    && (a.maxZ() >= b.minZ() && a.minZ() <= b.maxZ());
-}
-
-function loadModel(params): THREE.Mesh {
+function loadModel(params: any) : THREE.Mesh {
   var filePath = typeof params.filePath !== 'undefined' ? params.filePath : '';
   var encoding = typeof params.encoding !== 'undefined' ? params.encoding : 'UTF-8';
   var content = typeof params.content !== 'undefined' ? params.content : '';
@@ -80,7 +73,7 @@ function loadModel(params): THREE.Mesh {
   return mesh;
 }
 
-function textMesh(params) {
+function textMesh(params: any) : THREE.Mesh {
   var width = typeof params.width !== 'undefined' ? params.width : 10;
   var height = typeof params.height !== 'undefined' ? params.height : 10;
   var font = typeof params.font !== 'undefined' ? params.font : "Bold 20px Arial";
@@ -106,7 +99,7 @@ function textMesh(params) {
   return mesh;
 }
 
-function randFromArray(a) {
+function randFromArray(a) : any {
   return a[Math.floor((Math.random()*a.length))];
 };
 

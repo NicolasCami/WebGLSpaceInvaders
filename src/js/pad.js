@@ -8,7 +8,7 @@ var Pad = (function (_super) {
     function Pad(positionBounds, position) {
         if (positionBounds === void 0) { positionBounds = { min: 0, max: 1 }; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
+        _super.call(this, new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
         this.positionBounds = positionBounds;
         this.missileStartPosition = new THREE.Vector3(0.0, 1.0, 0.0);
         this.lastFire = 0;

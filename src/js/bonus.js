@@ -8,7 +8,7 @@ var Bonus = (function (_super) {
     function Bonus(type, position) {
         if (type === void 0) { type = 1; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, new THREE.Vector3(0.8, 0.8, 1.0), new THREE.Vector3(0.0, -Bonus.increment, 0.0), position);
+        _super.call(this, new THREE.Vector3(0.0, -Bonus.increment, 0.0), position);
         this.type = type;
         this.init();
     }

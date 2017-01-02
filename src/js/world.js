@@ -371,7 +371,7 @@ var World = (function () {
             // check missile collision with aliens
             for (var i = 0; i < this.missiles.length; i++) {
                 for (var j = 0; j < this.alienGroup.getLength(); j++) {
-                    if (!this.missiles[i].alien && boxCollision(this.alienGroup.get(j), this.missiles[i])) {
+                    if (!this.missiles[i].alien && this.alienGroup.get(j).collision(this.missiles[i])) {
                         missilePadTouch = true;
                         var alien = this.alienGroup.get(j);
                         //console.log('missile collision avec alien');
@@ -401,7 +401,7 @@ var World = (function () {
             }
             for (var i = 0; i < this.missiles.length; i++) {
                 for (var j = 0; j < this.alienBonus.length; j++) {
-                    if (!this.missiles[i].alien && boxCollision(this.alienBonus[j], this.missiles[i])) {
+                    if (!this.missiles[i].alien && this.alienBonus[j].collision(this.missiles[i])) {
                         missilePadTouch = true;
                         var alien = this.alienBonus[j];
                         // explosion
@@ -428,7 +428,7 @@ var World = (function () {
             // check collision of alien's missile with pad
             if (this.invincible == false) {
                 for (var i = 0; i < this.missiles.length; i++) {
-                    if (boxCollision(this.missiles[i], this.pad)) {
+                    if (this.missiles[i].collision(this.pad)) {
                         soundPadExplosion.play();
                         Game.getInstance().updateLife(Game.getInstance().life - 1);
                         this.removeMissile(i);
@@ -450,7 +450,7 @@ var World = (function () {
             // check block collision
             for (var i = 0; i < this.missiles.length; i++) {
                 for (var j = 0; j < this.blocks.length; j++) {
-                    if (boxCollision(this.blocks[j], this.missiles[i])) {
+                    if (this.blocks[j].collision(this.missiles[i])) {
                         if (!this.missiles[i].alien) {
                             missilePadTouch = true;
                         }
@@ -472,7 +472,7 @@ var World = (function () {
             }
             // check bonus collision
             for (var i = 0; i < this.bonus.length; i++) {
-                if (boxCollision(this.bonus[i], this.pad)) {
+                if (this.bonus[i].collision(this.pad)) {
                     soundBonus.play();
                     // give bonus to pad
                     this.pad.addBonus(this.bonus[i]);

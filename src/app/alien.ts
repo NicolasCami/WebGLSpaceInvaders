@@ -19,7 +19,7 @@ class Alien extends Game3dObject {
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 missileVelocity: number = -1.0) {
 
-        super(new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
+        super(velocity, position);
         
         this.type = type;
         this.lastMeshSwitch = 0;

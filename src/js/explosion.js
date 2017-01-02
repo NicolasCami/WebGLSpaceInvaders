@@ -11,7 +11,7 @@ var Explosion = (function (_super) {
         if (particleSize === void 0) { particleSize = 0.1; }
         if (particleColor === void 0) { particleColor = 0xff0000; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, new THREE.Vector3(particleCloudSize, particleCloudSize, particleCloudSize), new THREE.Vector3(0.0, 0.0, 0.0), position);
+        _super.call(this, new THREE.Vector3(0.0, 0.0, 0.0), position);
         this.particleCloudSize = particleCloudSize;
         this.particleNb = particleNb;
         this.particleSize = particleSize;

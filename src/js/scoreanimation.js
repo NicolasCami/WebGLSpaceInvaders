@@ -9,7 +9,7 @@ var ScoreAnimation = (function (_super) {
         if (text === void 0) { text = ''; }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (width === void 0) { width = 5; }
-        _super.call(this, new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, 0.0, ScoreAnimation.INCREMENT), position);
+        _super.call(this, new THREE.Vector3(0.0, 0.0, ScoreAnimation.INCREMENT), position);
         this.time = Date.now();
         this.text = text;
         this.width = width;

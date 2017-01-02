@@ -22,7 +22,7 @@ class Pad extends Game3dObject {
     constructor(positionBounds: any = { min: 0, max: 1 },
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
-        super(new THREE.Vector3(1.5, 0.75, 1.0), new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
+        super(new THREE.Vector3(Pad.increment, 0.0, 0.0), position);
         
         this.positionBounds = positionBounds;
         this.missileStartPosition = new THREE.Vector3(0.0, 1.0, 0.0);

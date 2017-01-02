@@ -10,7 +10,7 @@ var Alien = (function (_super) {
         if (velocity === void 0) { velocity = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
         if (missileVelocity === void 0) { missileVelocity = -1.0; }
-        _super.call(this, new THREE.Vector3(1.0, 1.0, 1.0), velocity, position);
+        _super.call(this, velocity, position);
         this.getScore = function () {
             return this.score;
         };

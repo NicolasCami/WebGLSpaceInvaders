@@ -12,7 +12,7 @@ class ScoreAnimation extends Game3dObject {
                 position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0),
                 width: number = 5) {
 
-        super(new THREE.Vector3(1.0, 1.0, 1.0), new THREE.Vector3(0.0, 0.0, ScoreAnimation.INCREMENT), position);
+        super(new THREE.Vector3(0.0, 0.0, ScoreAnimation.INCREMENT), position);
         
         this.time = Date.now();
         this.text = text;
