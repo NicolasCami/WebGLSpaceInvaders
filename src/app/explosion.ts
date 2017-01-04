@@ -1,4 +1,6 @@
-class Explosion extends Game3dObject {
+import { Game3dObject } from "./abstract.game3dobject";
+
+export class Explosion extends Game3dObject {
 
     static LIFE_TIME = 1000.0;
 

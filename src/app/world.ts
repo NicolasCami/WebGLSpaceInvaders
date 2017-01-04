@@ -1,4 +1,16 @@
-class World {
+import { Game } from "./game";
+import { SoundService } from "./soundservice";
+import { Block } from "./block";
+import { Missile } from "./missile";
+import { Bonus } from "./bonus";
+import { AlienGroup } from "./aliengroup";
+import { AlienBonus } from "./alienbonus";
+import { Pad } from "./pad";
+import { Explosion } from "./explosion";
+import { ScoreAnimation } from "./scoreanimation";
+import { Key } from "./key";
+
+export class World {
 
     static bonusRate = 0.1;
 
@@ -156,7 +168,7 @@ class World {
         let size = 0.6;
         for(let i=0; i<4; i++) {
           for(let j=0; j<(3-this.level); j++) {
-            let b = new Block(Game.getInstance(), new THREE.Vector3(x+(size-0.01)*i, y+(size-0.01)*j, Math.random()*6.0));
+            let b = new Block(new THREE.Vector3(x+(size-0.01)*i, y+(size-0.01)*j, Math.random()*6.0));
             this.addBlock(b);
           }
         }
@@ -252,7 +264,7 @@ class World {
 
     public killThemAll() {
         for(let j= 0; j < this.alienGroup.getLength(); j++) {
-          soundAlienExplosion.play();
+          SoundService.getSoundByName('alien-explosion').play();
           let e = new Explosion(1.5, 50, 0.4, 0xff0000, this.alienGroup.get(j).mesh.position.clone());
           this.explosions.push(e);
           Game.getInstance().scene.remove(this.alienGroup.get(j).mesh);
@@ -465,7 +477,7 @@ class World {
                 let alien = this.alienGroup.get(j);
                 //console.log('missile collision avec alien');
                 // explosion
-                soundAlienExplosion.play();
+                SoundService.getSoundByName('alien-explosion').play();
                 e = new Explosion(1.5, 50, 0.4, alien.explosionColor, alien.mesh.position.clone());
                 this.explosions.push(e);
                 // score
@@ -494,7 +506,7 @@ class World {
                 missilePadTouch = true;
                 let alien = this.alienBonus[j];
                 // explosion
-                soundAlienExplosion.play();
+                SoundService.getSoundByName('alien-explosion').play();
                 e = new Explosion(1.5, 50, 0.4, 0xff0000, alien.mesh.position.clone());
                 this.explosions.push(e);
                 // score
@@ -519,7 +531,7 @@ class World {
           if(this.invincible == false) {
             for(let i= 0; i < this.missiles.length; i++) {
               if(this.missiles[i].collision(this.pad)) {
-                soundPadExplosion.play();
+                SoundService.getSoundByName('pad-explosion').play();
                 Game.getInstance().updateLife(Game.getInstance().life-1);
                 this.removeMissile(i);
                 this.killPad();
@@ -547,7 +559,7 @@ class World {
                   missilePadTouch = true;
                 }
                 // explosion
-                soundBlockExplosion.play();
+                SoundService.getSoundByName('block-explosion').play();
                 e = new Explosion(1.5, 30, 0.2, 0x22dd33, this.blocks[j].mesh.position.clone());
                 this.explosions.push(e);
                 // kill block
@@ -566,7 +578,7 @@ class World {
           // check bonus collision
           for(let i= 0; i < this.bonus.length; i++) {
             if(this.bonus[i].collision(this.pad)) {
-              soundBonus.play();
+              SoundService.getSoundByName('bonus').play();
               // give bonus to pad
               this.pad.addBonus(this.bonus[i]);
               // explosion

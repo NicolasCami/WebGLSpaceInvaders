@@ -1,4 +1,11 @@
-class Pad extends Game3dObject {
+import { Game } from "./game";
+import { Game3dObject } from "./abstract.game3dobject";
+import { SoundService } from "./soundservice";
+import { Missile } from "./missile";
+import { Bonus } from "./bonus";
+import { ScoreAnimation } from "./scoreanimation";
+
+export class Pad extends Game3dObject {
 
     static increment = 0.15;
     static fireDelay = 2000.0;
@@ -140,7 +147,7 @@ class Pad extends Game3dObject {
         }
 
         if(Date.now()-this.lastFire > delay) {
-          soundPadFire.play();
+          SoundService.getSoundByName('pad-fire').play();
           var m = null;
           if(this.missileInvincible) {
             m = new Missile(true, false, this.mesh.position.clone().add(this.missileStartPosition));

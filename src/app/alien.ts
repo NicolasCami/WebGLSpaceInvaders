@@ -1,4 +1,9 @@
-class Alien extends Game3dObject {
+import { Game } from "./game";
+import { Game3dObject } from "./abstract.game3dobject";
+import { AlienGroup } from "./aliengroup";
+import { Missile } from "./missile";
+
+export class Alien extends Game3dObject {
 
     static increment = 0.05;
     static meshSwitchDelay = 1000;

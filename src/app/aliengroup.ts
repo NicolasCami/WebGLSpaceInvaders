@@ -1,4 +1,9 @@
-class AlienGroup {
+import { Game } from "./game";
+import { SoundService } from "./soundservice";
+import { Alien } from "./alien";
+import { Missile } from "./missile";
+
+export class AlienGroup {
 
     static direction = { right: 1, left: -1 };
     static positionBounds = { min: -11, max: 11 };
@@ -141,7 +146,7 @@ class AlienGroup {
             firingAlien = this.chooseFiringAlien();
             m = this.aliens[firingAlien].fire();
             if(m) {
-                soundAlienFire.play();
+                SoundService.getSoundByName('alien-fire').play();
                 return m;
             }
         }

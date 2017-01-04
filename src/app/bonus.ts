@@ -1,4 +1,6 @@
-class Bonus extends Game3dObject {
+import { Game3dObject } from "./abstract.game3dobject";
+
+export class Bonus extends Game3dObject {
 
     static increment = 0.05;
     static type = { superMissile: 1, extraLife: 2 };

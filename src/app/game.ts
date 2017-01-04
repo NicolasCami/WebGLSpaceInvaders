@@ -1,4 +1,9 @@
-class Game {
+import { Statistics } from "./statistics";
+import { World } from "./world";
+import { Menu } from "./menu";
+import { SoundService } from "./soundservice";
+
+export class Game {
 
     private static instance: Game;
 
@@ -33,6 +38,8 @@ class Game {
             throw new Error("Game is a singleton. Use Game.getInstance() instead.");
         }
         Game.instance = this;
+
+        this.initSound();
 
         this.stats = new Statistics();
 
@@ -71,11 +78,11 @@ class Game {
         PAUSE EVENTS
         **/
         jQuery('.resume').click(function() {
-            soundClick.play();
+            SoundService.getSoundByName('click').play();
             this.pauseOff();
         }.bind(this));
         jQuery('.menu').click(function() {
-            soundClick.play();
+            SoundService.getSoundByName('click').play();
             this.pauseOff();
             this.backToMenu();
         }.bind(this));
@@ -135,6 +142,22 @@ class Game {
         this.scene.add(this.particleSystem);
     }
 
+    private initSound() {
+        SoundService.loadSound( 'playing', 'src/medias/sounds/music_playing.ogg', 0.4, true);
+        SoundService.loadSound( 'menu', 'src/medias/sounds/alt/music_menu.ogg', 0.6, true );
+        SoundService.loadSound( 'lost', 'src/medias/sounds/music_lost.ogg',0.6,false);
+        SoundService.loadSound( 'alien-fire', 'src/medias/sounds/pad_fire.ogg',0.1,false);
+        SoundService.loadSound( 'pad-fire', 'src/medias/sounds/pad_fire.ogg',0.1,false);
+        SoundService.loadSound( 'alien-explosion', 'src/medias/sounds/alien_explosion.ogg',0.8,false);
+        SoundService.loadSound( 'block-explosion', 'src/medias/sounds/block_explosion.ogg',0.5,false);
+        SoundService.loadSound( 'pad-explosion', 'src/medias/sounds/pad_explosion.ogg',0.5,false);
+        SoundService.loadSound( 'click', 'src/medias/sounds/click.ogg',1,false);
+        SoundService.loadSound( 'click-start', 'src/medias/sounds/click_start.ogg',0.8,false);
+        SoundService.loadSound( 'click-pause', 'src/medias/sounds/click_pause.ogg',0.6,false);
+        SoundService.loadSound( 'bonus', 'src/medias/sounds/bonus.ogg',0.6,false);
+        SoundService.loadSound( 'win', 'src/medias/sounds/victory.ogg',0.6,false);
+    }
+
     public render = () => {
         this.stats.update();
         
@@ -144,7 +167,7 @@ class Game {
             this.particleSystem.rotation.y += this.particleSystem.particleSpeed;
             
             if(this.world.getAliensLengh() == 0) {
-                soundVictory.play();
+                SoundService.getSoundByName('win').play();
                 
                 if(this.world.getLevel() < 3) {
                     this.messageOn({
@@ -190,12 +213,12 @@ class Game {
 
     public newGame() {
         this.newGameTransition = true;
-        soundMenu.pause();
-        soundClickStart.play();
+        SoundService.getSoundByName('menu').pause();
+        SoundService.getSoundByName('click-start').play();
     }
 
     private newGameReady() {
-        soundPlaying.play();
+        SoundService.getSoundByName('playing').play();
         this.camera.rotation.x = Math.PI/4.0;
         this.newGameTransition = false;
         this.pause = false;
@@ -213,7 +236,7 @@ class Game {
     }
 
     private nextLevel = () => {
-        soundPlaying.play();
+        SoundService.getSoundByName('playing').play();
         this.world.nextLevel();
         this.messageOff();
         this.updateLevel();
@@ -222,33 +245,33 @@ class Game {
     public musicOnOff = () => {
         this.music = (this.music) ? false : true;
         if(this.music) {
-            soundPlaying.resetVolume();
-            soundMenu.resetVolume();
+            SoundService.getSoundByName('playing').resetVolume();
+            SoundService.getSoundByName('menu').resetVolume();
         }
         else {
-            soundPlaying.audio.volume = 0;
-            soundMenu.audio.volume = 0;
+            SoundService.getSoundByName('playing').audio.volume = 0;
+            SoundService.getSoundByName('menu').audio.volume = 0;
         }
     }
 
     public pauseOn = () => {
-        soundPlaying.pause();
-        soundClickPause.play();
+        SoundService.getSoundByName('playing').pause();
+        SoundService.getSoundByName('click-pause').play();
         this.pause = true;
         $('.pause').show();
     }
 
     public pauseOff = () => {
-        soundClickPause.play();
+        SoundService.getSoundByName('click-pause').play();
         if(!$('.pause').is(":hidden")) {
-            soundPlaying.resume();
+            SoundService.getSoundByName('playing').resume();
             this.pause = false;
             $('.pause').hide();
         }
     }
 
     private messageOn = (params: any) => {
-        soundPlaying.pause();
+        SoundService.getSoundByName('playing').pause();
         var title = typeof params.title !== 'undefined' ? params.title : '';
         var text = typeof params.text !== 'undefined' ? params.text : '';
         var button = typeof params.button !== 'undefined' ? params.button : null;
@@ -266,7 +289,7 @@ class Game {
     }
 
     private messageOff = () => {
-        soundVictory.off();
+        SoundService.getSoundByName('win').off();
         this.pause = false;
         $('.message').hide();
         $(window).unbind("keydown", this.messageButtonAction);
@@ -296,8 +319,8 @@ class Game {
     }
 
     public lose = () => {
-        soundPlaying.pause();
-        soundLost.play();
+        SoundService.getSoundByName('playing').pause();
+        SoundService.getSoundByName('lost').play();
         var html = '';
         html += '<p>You lost...</p>';
         this.messageOn({
@@ -311,9 +334,9 @@ class Game {
     }
 
     public backToMenu = () => {
-        soundClick.play();
-        soundPlaying.pause();
-        soundMenu.resume();
+        SoundService.getSoundByName('click').play();
+        SoundService.getSoundByName('playing').pause();
+        SoundService.getSoundByName('menu').resume();
         this.currentCamera = 0;
         this.menuTransition = true;
         this.messageOff();
@@ -354,5 +377,3 @@ class Game {
     }
 
 }
-
-$(new Function('var game = Game.getInstance();'));

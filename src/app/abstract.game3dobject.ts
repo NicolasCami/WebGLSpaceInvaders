@@ -1,4 +1,6 @@
-abstract class Game3dObject {
+import { Game } from "./game";
+
+export abstract class Game3dObject {
 
     static increment = 0.05;
 
@@ -72,14 +74,10 @@ abstract class Game3dObject {
 
     public collision(obj: Game3dObject) : boolean {
         let result : boolean = false;
+
         result = (obj.maxX() >= this.minX() && obj.minX() <= this.maxX())
                  && (obj.maxY() >= this.minY() && obj.minY() <= this.maxY())
                  && (obj.maxZ() >= this.minZ() && obj.minZ() <= this.maxZ());
-
-        if(this.bb && obj.bb) {
-            // console.log(this.bb.size(),'/',this.size);
-            // result = this.bb.intersect(obj.bb);
-        }
 
         return result;
     }

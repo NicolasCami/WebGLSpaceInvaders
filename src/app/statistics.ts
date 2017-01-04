@@ -1,4 +1,4 @@
-class Statistics {
+export class Statistics {
 
     stats: any;
 

@@ -1,4 +1,6 @@
-class ScoreAnimation extends Game3dObject {
+import { Game3dObject } from "./abstract.game3dobject";
+
+export class ScoreAnimation extends Game3dObject {
 
     static INCREMENT = 0.05;
     static LIFE_TIME = 2000.0;

@@ -3,45 +3,49 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Missile = (function (_super) {
-    __extends(Missile, _super);
-    function Missile(invincible, isAlien, position) {
-        if (invincible === void 0) { invincible = false; }
-        if (isAlien === void 0) { isAlien = false; }
-        if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
-        _super.call(this, new THREE.Vector3(0.0, Missile.increment, 0.0), position);
-        this.invincible = invincible;
-        this.isAlien = isAlien;
-        this.init();
-    }
-    Missile.prototype.initMesh = function () {
-        if (this.isAlien) {
-            this.mesh = missileData.type[0].model.clone();
-            this.size = new THREE.Vector3(0.1, 0.3, 0.1);
-            this.velocity.y *= -1;
+define(["require", "exports", "./abstract.game3dobject"], function (require, exports, abstract_game3dobject_1) {
+    "use strict";
+    var Missile = (function (_super) {
+        __extends(Missile, _super);
+        function Missile(invincible, isAlien, position) {
+            if (invincible === void 0) { invincible = false; }
+            if (isAlien === void 0) { isAlien = false; }
+            if (position === void 0) { position = new THREE.Vector3(0.0, 0.0, 0.0); }
+            _super.call(this, new THREE.Vector3(0.0, Missile.increment, 0.0), position);
+            this.invincible = invincible;
+            this.isAlien = isAlien;
+            this.init();
         }
-        else {
-            if (this.invincible) {
-                this.mesh = missileData.type[2].model.clone();
-                this.size = new THREE.Vector3(0.3, 0.3, 0.3);
+        Missile.prototype.initMesh = function () {
+            if (this.isAlien) {
+                this.mesh = missileData.type[0].model.clone();
+                this.size = new THREE.Vector3(0.1, 0.3, 0.1);
+                this.velocity.y *= -1;
             }
             else {
-                this.mesh = missileData.type[1].model.clone();
-                this.size = new THREE.Vector3(0.1, 0.3, 0.1);
+                if (this.invincible) {
+                    this.mesh = missileData.type[2].model.clone();
+                    this.size = new THREE.Vector3(0.3, 0.3, 0.3);
+                }
+                else {
+                    this.mesh = missileData.type[1].model.clone();
+                    this.size = new THREE.Vector3(0.1, 0.3, 0.1);
+                }
             }
-        }
-    };
-    Missile.prototype.animate = function () {
-        this.mesh.position.add(this.velocity);
-    };
-    Missile.prototype.getDirection = function () {
-        return this.velocity.clone();
-    };
-    Missile.prototype.isInvincible = function () {
-        return this.invincible;
-    };
-    Missile.increment = 0.2;
-    return Missile;
-}(Game3dObject));
+        };
+        Missile.prototype.animate = function () {
+            this.mesh.position.add(this.velocity);
+        };
+        Missile.prototype.getDirection = function () {
+            return this.velocity.clone();
+        };
+        Missile.prototype.isInvincible = function () {
+            return this.invincible;
+        };
+        Missile.increment = 0.2;
+        return Missile;
+    }(abstract_game3dobject_1.Game3dObject));
+    exports.Missile = Missile;
+});
 
 //# sourceMappingURL=missile.js.map

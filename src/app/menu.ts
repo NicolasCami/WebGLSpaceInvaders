@@ -1,4 +1,7 @@
-class Menu {
+import { Game } from "./game";
+import { SoundService } from "./soundservice";
+
+export class Menu {
 
     static playMaterialOver = new THREE.MeshBasicMaterial({
         color:0x2FA1D6,
@@ -34,7 +37,7 @@ class Menu {
     }
 
     private init() {
-        soundMenu.play();
+        SoundService.getSoundByName('menu').play();
 
         this.play = new THREE.Mesh(new THREE.BoxGeometry(this.width/2, this.height/2, 1), Menu.playMaterialNotOver);
         this.play.position.set(this.x, this.y+5, this.z);

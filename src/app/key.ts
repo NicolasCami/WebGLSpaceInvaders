@@ -1,4 +1,6 @@
-class Key {
+import { Game } from "./game";
+
+export class Key {
 
     private static instance: Key;
 
@@ -85,5 +87,3 @@ class Key {
     }
 
 }
-
-$(new Function('var key = Key.getInstance();'));

@@ -1,4 +1,6 @@
-class AlienBonus extends Alien {
+import { Alien } from "./alien";
+
+export class AlienBonus extends Alien {
 
     static increment = 0.03;
     static steps = { init: 1, move: 2, end: 3 };

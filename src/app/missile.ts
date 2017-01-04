@@ -1,4 +1,6 @@
-class Missile extends Game3dObject {
+import { Game3dObject } from "./abstract.game3dobject";
+
+export class Missile extends Game3dObject {
 
     static increment = 0.2;
 

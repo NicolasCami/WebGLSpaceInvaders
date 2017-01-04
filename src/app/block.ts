@@ -1,12 +1,14 @@
-class Block extends Game3dObject {
+import { Game } from "./game";
+import { Game3dObject } from "./abstract.game3dobject";
+
+export class Block extends Game3dObject {
 
     static orientations = { up: 1, down: -1 };
 
     orientation: number;
     moveLimit: number;
 
-    constructor(game: Game,
-                position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
+    constructor(position: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0)) {
 
         super(new THREE.Vector3(0.001 + (Math.random()*0.005), 0.0, 0.0), position);
         
