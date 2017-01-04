@@ -1,4 +1,5 @@
 import { Game } from "./game";
+import { SoundService } from "./soundservice";
 
 export class Key {
 
@@ -78,7 +79,7 @@ export class Key {
         }
 
         if(event.keyCode == Key.keyCode.m) {
-            Game.getInstance().musicOnOff();
+            SoundService.toggle();
         }
     }
 

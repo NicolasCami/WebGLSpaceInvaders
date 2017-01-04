@@ -19,7 +19,6 @@ export class Game {
     particleSystem: THREE.PointCloud;
 
     pause = true;
-    music = true;
     currentCamera = 0;
     newGameTransition = false;
     menuTransition = false;
@@ -240,18 +239,6 @@ export class Game {
         this.world.nextLevel();
         this.messageOff();
         this.updateLevel();
-    }
-
-    public musicOnOff = () => {
-        this.music = (this.music) ? false : true;
-        if(this.music) {
-            SoundService.getSoundByName('playing').resetVolume();
-            SoundService.getSoundByName('menu').resetVolume();
-        }
-        else {
-            SoundService.getSoundByName('playing').audio.volume = 0;
-            SoundService.getSoundByName('menu').audio.volume = 0;
-        }
     }
 
     public pauseOn = () => {

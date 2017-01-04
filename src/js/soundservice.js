@@ -20,13 +20,34 @@ define(["require", "exports", "./sound"], function (require, exports, sound_1) {
                 throw new Error("SoundService: sound already exists: " + name);
             }
             SoundService.sounds[name] = new sound_1.Sound([file], volume, loop);
+            if (SoundService.mute) {
+                SoundService.sounds[name].audio.volume = 0;
+            }
+            else {
+                SoundService.sounds[name].resetVolume();
+            }
             return SoundService.sounds[name];
         };
         SoundService.muted = function () {
             return SoundService.mute;
         };
+        SoundService.toggle = function () {
+            var name;
+            SoundService.mute = !SoundService.mute;
+            if (SoundService.mute) {
+                for (var name_1 in SoundService.sounds) {
+                    SoundService.sounds[name_1].audio.volume = 0;
+                }
+            }
+            else {
+                for (var name_2 in SoundService.sounds) {
+                    SoundService.sounds[name_2].resetVolume();
+                }
+            }
+            return SoundService.mute;
+        };
         SoundService.sounds = {};
-        SoundService.mute = false;
+        SoundService.mute = true;
         return SoundService;
     }());
     exports.SoundService = SoundService;

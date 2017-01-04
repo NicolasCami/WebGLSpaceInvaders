@@ -25,11 +25,36 @@ export class SoundService {
         }
 
         SoundService.sounds[name] = new Sound( [ file ], volume, loop);
+        if(SoundService.mute) {
+            SoundService.sounds[name].audio.volume = 0;
+        }
+        else {
+            SoundService.sounds[name].resetVolume();
+        }
 
         return SoundService.sounds[name];
     }
 
     static muted() : boolean {
+        return SoundService.mute;
+    }
+
+    static toggle() : boolean {
+
+        let name : string;
+        SoundService.mute = !SoundService.mute;
+
+        if(SoundService.mute) {
+            for (let name in SoundService.sounds) {
+                SoundService.sounds[name].audio.volume = 0;
+            }
+        }
+        else {
+            for (let name in SoundService.sounds) {
+                SoundService.sounds[name].resetVolume();
+            }
+        }
+
         return SoundService.mute;
     }
 

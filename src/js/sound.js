@@ -1,4 +1,4 @@
-define(["require", "exports", "./soundservice"], function (require, exports, soundservice_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     var Sound = (function () {
         function Sound(sources, volume, loop) {
@@ -14,18 +14,14 @@ define(["require", "exports", "./soundservice"], function (require, exports, sou
             this.audio.volume = volume;
         }
         Sound.prototype.play = function () {
-            if (!soundservice_1.SoundService.muted()) {
-                this.audio.load();
-                this.audio.play();
-            }
+            this.audio.load();
+            this.audio.play();
         };
         Sound.prototype.pause = function () {
             this.audio.pause();
         };
         Sound.prototype.resume = function () {
-            if (!soundservice_1.SoundService.muted()) {
-                this.audio.play();
-            }
+            this.audio.play();
         };
         Sound.prototype.load = function () {
             this.audio.load();

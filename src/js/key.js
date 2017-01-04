@@ -1,4 +1,4 @@
-define(["require", "exports", "./game"], function (require, exports, game_1) {
+define(["require", "exports", "./game", "./soundservice"], function (require, exports, game_1, soundservice_1) {
     "use strict";
     var Key = (function () {
         function Key() {
@@ -51,7 +51,7 @@ define(["require", "exports", "./game"], function (require, exports, game_1) {
                 }
             }
             if (event.keyCode == Key.keyCode.m) {
-                game_1.Game.getInstance().musicOnOff();
+                soundservice_1.SoundService.toggle();
             }
         };
         Key.prototype.onKeyup = function (event) {

@@ -1,5 +1,3 @@
-import { SoundService } from "./soundservice";
-
 export class Sound {
   
     audio: HTMLAudioElement;
@@ -18,10 +16,8 @@ export class Sound {
     }
 
     public play() {
-        if(!SoundService.muted()){
-            this.audio.load();
-            this.audio.play();
-        }
+        this.audio.load();
+        this.audio.play();
     }
 
     public pause() {
@@ -29,9 +25,7 @@ export class Sound {
     }
 
     public resume() {
-        if (!SoundService.muted()){
-            this.audio.play();
-        }        
+        this.audio.play();     
     }
 
     public load() {

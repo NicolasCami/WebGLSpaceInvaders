@@ -4,7 +4,6 @@ define(["require", "exports", "./statistics", "./world", "./menu", "./soundservi
         function Game() {
             var _this = this;
             this.pause = true;
-            this.music = true;
             this.currentCamera = 0;
             this.newGameTransition = false;
             this.menuTransition = false;
@@ -63,17 +62,6 @@ define(["require", "exports", "./statistics", "./world", "./menu", "./soundservi
                 _this.world.nextLevel();
                 _this.messageOff();
                 _this.updateLevel();
-            };
-            this.musicOnOff = function () {
-                _this.music = (_this.music) ? false : true;
-                if (_this.music) {
-                    soundservice_1.SoundService.getSoundByName('playing').resetVolume();
-                    soundservice_1.SoundService.getSoundByName('menu').resetVolume();
-                }
-                else {
-                    soundservice_1.SoundService.getSoundByName('playing').audio.volume = 0;
-                    soundservice_1.SoundService.getSoundByName('menu').audio.volume = 0;
-                }
             };
             this.pauseOn = function () {
                 soundservice_1.SoundService.getSoundByName('playing').pause();
