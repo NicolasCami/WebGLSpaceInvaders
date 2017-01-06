@@ -1,4 +1,5 @@
 import { Game3dObject } from "./abstract.game3dobject";
+import { MeshService } from "./meshservice";
 
 export class Missile extends Game3dObject {
 
@@ -22,17 +23,17 @@ export class Missile extends Game3dObject {
 
     public initMesh() {
         if(this.isAlien) {
-            this.mesh = missileData.type[0].model.clone();
+            this.mesh = MeshService.getRandomByName('missile-alien');
             this.size = new THREE.Vector3(0.1, 0.3, 0.1);
             this.velocity.y *= -1;
         }
         else {
             if(this.invincible) {
-                this.mesh = missileData.type[2].model.clone();
+                this.mesh = MeshService.getRandomByName('missile-pad-big');
                 this.size = new THREE.Vector3(0.3, 0.3, 0.3);
             }
             else {
-                this.mesh = missileData.type[1].model.clone();
+                this.mesh = MeshService.getRandomByName('missile-pad');
                 this.size = new THREE.Vector3(0.1, 0.3, 0.1);
             }
         }

@@ -9,13 +9,14 @@ import { Pad } from "./pad";
 import { Explosion } from "./explosion";
 import { ScoreAnimation } from "./scoreanimation";
 import { Key } from "./key";
+import { MaterialService } from "./materialservice";
+import { MeshService } from "./meshservice";
 
 export class World {
 
     static bonusRate = 0.1;
 
     missiles = [];
-    lights = [];
     blocks: Block[];
     explosions = [];
     scores = [];
@@ -49,7 +50,6 @@ export class World {
 
     constructor(params: any) {
         this.missiles = [];
-        this.lights = [];
         this.blocks = [];
         this.explosions = [];
         this.scores = [];
@@ -102,7 +102,7 @@ export class World {
           transparent:true,
         });
 
-        let ground = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, 0.1), groundMaterial);
+        let ground = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, 0.1), MaterialService.getSingleByName('ground'));
         ground.position.set(this.x, this.y+2, this.z);
         ground.receiveShadow = true;
         Game.getInstance().scene.add(ground);
@@ -111,19 +111,10 @@ export class World {
 
         // plots de signalisation : limite alien
         for(let i=0; i<8; i++) {
-          let tmp = worldData.limit.clone();
+          let tmp = MeshService.getRandomByName('alien-limit');
           tmp.position.set(this.x-(this.width/2)+0.5 + i*2.7, this.y-2, this.z+0.2);
           Game.getInstance().scene.add(tmp);
         }
-
-        missileLight1.position.copy(this.place.position);
-        missileLight2.position.copy(this.place.position);
-        missileLight3.position.copy(this.place.position);
-        missileLight4.position.copy(this.place.position);
-        this.lights.push(missileLight1);
-        this.lights.push(missileLight2);
-        this.lights.push(missileLight3);
-        this.lights.push(missileLight4);
 
         this.deathBeamLoad = new THREE.PointLight( 0x00ff00, 2, 20 );
         this.deathBeamLoad.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) ) );

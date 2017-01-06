@@ -1,9 +1,11 @@
 import { Game3dObject } from "./abstract.game3dobject";
+import { MeshService } from "./meshservice";
 
 export class ScoreAnimation extends Game3dObject {
 
     static INCREMENT = 0.05;
     static LIFE_TIME = 2000.0;
+    private static textCache = {};
 
     time: number;
     text: string;
@@ -25,18 +27,18 @@ export class ScoreAnimation extends Game3dObject {
     }
 
     public initMesh() {
-        if(this.text in textData) {
-            this.mesh = textData[this.text].clone();
+        if(this.text in ScoreAnimation.textCache) {
+            this.mesh = ScoreAnimation.textCache[this.text].clone();
         }
         else {
-            textData[this.text] = textMesh({
+            ScoreAnimation.textCache[this.text] = MeshService.createTextMesh({
                 text:this.text,
                 color:'rgba(255,255,255,1)',
                 font:'Bold 50px Arial',
                 width: this.width,
                 height: 3,
             });
-            this.mesh = textData[this.text].clone();
+            this.mesh = ScoreAnimation.textCache[this.text].clone();
         }
 
         this.mesh.rotation.x = Math.PI / 2;

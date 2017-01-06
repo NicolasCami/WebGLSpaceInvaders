@@ -1,15 +1,13 @@
-define(["require", "exports", "./game", "./soundservice", "./block", "./missile", "./bonus", "./aliengroup", "./alienbonus", "./pad", "./explosion", "./scoreanimation", "./key"], function (require, exports, game_1, soundservice_1, block_1, missile_1, bonus_1, aliengroup_1, alienbonus_1, pad_1, explosion_1, scoreanimation_1, key_1) {
+define(["require", "exports", "./game", "./soundservice", "./block", "./missile", "./bonus", "./aliengroup", "./alienbonus", "./pad", "./explosion", "./scoreanimation", "./key", "./materialservice", "./meshservice"], function (require, exports, game_1, soundservice_1, block_1, missile_1, bonus_1, aliengroup_1, alienbonus_1, pad_1, explosion_1, scoreanimation_1, key_1, materialservice_1, meshservice_1) {
     "use strict";
     var World = (function () {
         function World(params) {
             this.missiles = [];
-            this.lights = [];
             this.explosions = [];
             this.scores = [];
             this.bonus = [];
             this.alienBonus = [];
             this.missiles = [];
-            this.lights = [];
             this.blocks = [];
             this.explosions = [];
             this.scores = [];
@@ -52,25 +50,17 @@ define(["require", "exports", "./game", "./soundservice", "./block", "./missile"
                 shininess: 200,
                 transparent: true,
             });
-            var ground = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, 0.1), groundMaterial);
+            var ground = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, 0.1), materialservice_1.MaterialService.getSingleByName('ground'));
             ground.position.set(this.x, this.y + 2, this.z);
             ground.receiveShadow = true;
             game_1.Game.getInstance().scene.add(ground);
             var sphere = new THREE.SphereGeometry(0.2, 16, 8);
             // plots de signalisation : limite alien
             for (var i = 0; i < 8; i++) {
-                var tmp = worldData.limit.clone();
+                var tmp = meshservice_1.MeshService.getRandomByName('alien-limit');
                 tmp.position.set(this.x - (this.width / 2) + 0.5 + i * 2.7, this.y - 2, this.z + 0.2);
                 game_1.Game.getInstance().scene.add(tmp);
             }
-            missileLight1.position.copy(this.place.position);
-            missileLight2.position.copy(this.place.position);
-            missileLight3.position.copy(this.place.position);
-            missileLight4.position.copy(this.place.position);
-            this.lights.push(missileLight1);
-            this.lights.push(missileLight2);
-            this.lights.push(missileLight3);
-            this.lights.push(missileLight4);
             this.deathBeamLoad = new THREE.PointLight(0x00ff00, 2, 20);
             this.deathBeamLoad.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({ color: 0x00ff00 })));
             this.deathBeamLoad.position.set(114, 255, -80);

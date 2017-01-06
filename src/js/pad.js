@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./game", "./abstract.game3dobject", "./soundservice", "./missile", "./bonus", "./scoreanimation"], function (require, exports, game_1, abstract_game3dobject_1, soundservice_1, missile_1, bonus_1, scoreanimation_1) {
+define(["require", "exports", "./game", "./abstract.game3dobject", "./meshservice", "./soundservice", "./missile", "./bonus", "./scoreanimation"], function (require, exports, game_1, abstract_game3dobject_1, meshservice_1, soundservice_1, missile_1, bonus_1, scoreanimation_1) {
     "use strict";
     var Pad = (function (_super) {
         __extends(Pad, _super);
@@ -24,15 +24,7 @@ define(["require", "exports", "./game", "./abstract.game3dobject", "./soundservi
             this.init();
         }
         Pad.prototype.initMesh = function () {
-            var model = loadModel({
-                content: ',          **      **,         *  *    *  *,         *  *    *  *,          **      **,          **      **,         *  *    *  *,         *  *    *  *,          **      **/*                            *,          **      **,         **** ** ****,         ************,         ************,         ************,         ************,         ************,          **      **,*                            */***                        ***,   **     **      **     **,     **  ************  **,       ****************,         ************,         ************,       ****************,     **  ************  **,   **     **      **     **,***                        ***/***                        ***,   **     **      **     **,     **  ************  **,       ****************,         ************,         ************,       ****************,     **  ************  **,   **     **      **     **,***                        ***/*                            *,          **      **,         **** ** ****,         ************,         ************,         ************,         ************,         ************,          **      **,*                            */*                            *,,              **,            ******,            ******,            ******,            ******,              **,,*                            */*                            *,,              **,            ******,            ******,            ******,            ******,              **,,*                            */*                            *,,              **,            ******,            ******,            ******,            ******,              **,,*                            */*                            *,,              **,            ******,            ******,            ******,            ******,              **,,*                            */*                            *,,              **,            ******,            ******,            ******,            ******,              **,,*                            */,,              **,            ******,            ******,            ******,            ******,              **/,,              **,            ******,            ******,            ******,            ******,              **/,,,             ****,            ******,            ******,             ****,/,,,             ****,            ******,            ******,             ****,/,,,              **,             ****,             ****,              **/',
-                modelSize: { x: 1.5, y: 0.75, z: 1.0 },
-                material: padMaterials,
-                geometry: padBlockGeometry,
-                blockSize: 0.05,
-                axe: 'y',
-            });
-            this.mesh = model;
+            this.mesh = meshservice_1.MeshService.getRandomByName('pad');
         };
         Pad.prototype.left = function () {
             this.movingLeft = true;

@@ -1,5 +1,6 @@
 import { Game } from "./game";
 import { SoundService } from "./soundservice";
+import { MeshService } from "./meshservice";
 
 export class Menu {
 
@@ -43,7 +44,7 @@ export class Menu {
         this.play.position.set(this.x, this.y+5, this.z);
         Game.getInstance().scene.add(this.play);
 
-        var textPlay = textMesh({
+        var textPlay = MeshService.createTextMesh({
           text:'PLAY !',
           color:'rgba(255,255,255,1)',
           font:'Bold 50px Arial',
@@ -54,7 +55,7 @@ export class Menu {
         textPlay.rotation.x = Math.PI;
         Game.getInstance().scene.add(textPlay);
 
-        var textTitle = textMesh({
+        var textTitle = MeshService.createTextMesh({
           text:'SPACE INVADERS',
           color:'rgba(255,255,255,1)',
           font:'Bold 35px Arial',
@@ -65,38 +66,39 @@ export class Menu {
         textTitle.rotation.x = Math.PI;
         Game.getInstance().scene.add(textTitle);
 
-        this.aliens.push(alienData.type[2].modelMenu.clone());
-        this.aliens.push(alienData.type[1].modelMenu.clone());
-        this.aliens.push(alienData.type[0].modelMenu.clone());
-        this.aliens.push(alienData.type[3].modelMenu.clone());
+        let alienMenu = MeshService.getByName('menu');
+        this.aliens.push(alienMenu[0]);
+        this.aliens.push(alienMenu[1]);
+        this.aliens.push(alienMenu[2]);
+        this.aliens.push(alienMenu[3]);
         for(var i=0; i<this.aliens.length; i++) {
           this.aliens[i].position.set(-5 + (i*3), -9, 10.5);
           this.aliens[i].rotation.x = Math.PI;
           Game.getInstance().scene.add(this.aliens[i]);
         };
 
-        this.scores.push(textMesh({
+        this.scores.push(MeshService.createTextMesh({
           text:'+100',
           color:'rgba(255,255,255,1)',
           font:'Bold 50px Arial',
           width: 3,
           height: 1,
         }));
-        this.scores.push(textMesh({
+        this.scores.push(MeshService.createTextMesh({
           text:'+150',
           color:'rgba(255,255,255,1)',
           font:'Bold 50px Arial',
           width: 3,
           height: 1,
         }));
-        this.scores.push(textMesh({
+        this.scores.push(MeshService.createTextMesh({
           text:'+200',
           color:'rgba(255,255,255,1)',
           font:'Bold 50px Arial',
           width: 3,
           height: 1,
         }));
-        this.scores.push(textMesh({
+        this.scores.push(MeshService.createTextMesh({
           text:'+500',
           color:'rgba(255,255,255,1)',
           font:'Bold 50px Arial',

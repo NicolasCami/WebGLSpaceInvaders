@@ -1,4 +1,4 @@
-define(["require", "exports", "./statistics", "./world", "./menu", "./soundservice"], function (require, exports, statistics_1, world_1, menu_1, soundservice_1) {
+define(["require", "exports", "./statistics", "./world", "./menu", "./soundservice", "./materialservice", "./meshservice"], function (require, exports, statistics_1, world_1, menu_1, soundservice_1, materialservice_1, meshservice_1) {
     "use strict";
     var Game = (function () {
         function Game() {
@@ -132,6 +132,8 @@ define(["require", "exports", "./statistics", "./world", "./menu", "./soundservi
                 throw new Error("Game is a singleton. Use Game.getInstance() instead.");
             }
             Game.instance = this;
+            materialservice_1.MaterialService.init();
+            meshservice_1.MeshService.init();
             this.initSound();
             this.stats = new statistics_1.Statistics();
             this.scene = new THREE.Scene();

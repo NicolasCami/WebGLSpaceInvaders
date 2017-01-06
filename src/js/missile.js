@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./abstract.game3dobject"], function (require, exports, abstract_game3dobject_1) {
+define(["require", "exports", "./abstract.game3dobject", "./meshservice"], function (require, exports, abstract_game3dobject_1, meshservice_1) {
     "use strict";
     var Missile = (function (_super) {
         __extends(Missile, _super);
@@ -18,17 +18,17 @@ define(["require", "exports", "./abstract.game3dobject"], function (require, exp
         }
         Missile.prototype.initMesh = function () {
             if (this.isAlien) {
-                this.mesh = missileData.type[0].model.clone();
+                this.mesh = meshservice_1.MeshService.getRandomByName('missile-alien');
                 this.size = new THREE.Vector3(0.1, 0.3, 0.1);
                 this.velocity.y *= -1;
             }
             else {
                 if (this.invincible) {
-                    this.mesh = missileData.type[2].model.clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('missile-pad-big');
                     this.size = new THREE.Vector3(0.3, 0.3, 0.3);
                 }
                 else {
-                    this.mesh = missileData.type[1].model.clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('missile-pad');
                     this.size = new THREE.Vector3(0.1, 0.3, 0.1);
                 }
             }

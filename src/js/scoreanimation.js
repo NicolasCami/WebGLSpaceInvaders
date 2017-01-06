@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./abstract.game3dobject"], function (require, exports, abstract_game3dobject_1) {
+define(["require", "exports", "./abstract.game3dobject", "./meshservice"], function (require, exports, abstract_game3dobject_1, meshservice_1) {
     "use strict";
     var ScoreAnimation = (function (_super) {
         __extends(ScoreAnimation, _super);
@@ -18,18 +18,18 @@ define(["require", "exports", "./abstract.game3dobject"], function (require, exp
             this.init();
         }
         ScoreAnimation.prototype.initMesh = function () {
-            if (this.text in textData) {
-                this.mesh = textData[this.text].clone();
+            if (this.text in ScoreAnimation.textCache) {
+                this.mesh = ScoreAnimation.textCache[this.text].clone();
             }
             else {
-                textData[this.text] = textMesh({
+                ScoreAnimation.textCache[this.text] = meshservice_1.MeshService.createTextMesh({
                     text: this.text,
                     color: 'rgba(255,255,255,1)',
                     font: 'Bold 50px Arial',
                     width: this.width,
                     height: 3,
                 });
-                this.mesh = textData[this.text].clone();
+                this.mesh = ScoreAnimation.textCache[this.text].clone();
             }
             this.mesh.rotation.x = Math.PI / 2;
         };
@@ -46,6 +46,7 @@ define(["require", "exports", "./abstract.game3dobject"], function (require, exp
         };
         ScoreAnimation.INCREMENT = 0.05;
         ScoreAnimation.LIFE_TIME = 2000.0;
+        ScoreAnimation.textCache = {};
         return ScoreAnimation;
     }(abstract_game3dobject_1.Game3dObject));
     exports.ScoreAnimation = ScoreAnimation;

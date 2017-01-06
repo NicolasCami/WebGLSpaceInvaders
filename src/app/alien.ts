@@ -1,5 +1,6 @@
 import { Game } from "./game";
 import { Game3dObject } from "./abstract.game3dobject";
+import { MeshService } from "./meshservice";
 import { AlienGroup } from "./aliengroup";
 import { Missile } from "./missile";
 
@@ -42,29 +43,29 @@ export class Alien extends Game3dObject {
     public initMesh() {
         switch(this.type) {
             case Alien.type.bottom:
-                this.mesh = randFromArray(alienData.type[0].model1).clone();
-                this.mesh2 = randFromArray(alienData.type[0].model2).clone();
+                this.mesh = MeshService.getRandomByName('alien-bottom-1');
+                this.mesh2 = MeshService.getRandomByName('alien-bottom-2');
                 this.mesh2.visible = false;
                 this.score = 200;
                 this.explosionColor = 0x85b66c;
               break;
             case Alien.type.middle:
-                this.mesh = randFromArray(alienData.type[1].model1).clone();
-                this.mesh2 = randFromArray(alienData.type[1].model2).clone();
+                this.mesh = MeshService.getRandomByName('alien-middle-1');
+                this.mesh2 = MeshService.getRandomByName('alien-middle-2');
                 this.mesh2.visible = false;
                 this.score = 150;
                 this.explosionColor = 0x3d6686;
               break;
             case Alien.type.top:
-                this.mesh = randFromArray(alienData.type[2].model1).clone();
-                this.mesh2 = randFromArray(alienData.type[2].model2).clone();
+                this.mesh = MeshService.getRandomByName('alien-top-1');
+                this.mesh2 = MeshService.getRandomByName('alien-top-2');
                 this.mesh2.visible = false;
                 this.score = 100;
                 this.explosionColor = 0xaf72c5;
               break;
             case Alien.type.bonus:
-                this.mesh = randFromArray(alienData.type[3].model1).clone();
-                this.mesh2 = randFromArray(alienData.type[3].model2).clone();
+                this.mesh = MeshService.getRandomByName('alien-bonus-1');
+                this.mesh2 = MeshService.getRandomByName('alien-bonus-2');
                 this.mesh2.visible = false;
                 this.score = 500;
                 this.explosionColor = 0xaf72c5;

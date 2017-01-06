@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./abstract.game3dobject"], function (require, exports, abstract_game3dobject_1) {
+define(["require", "exports", "./abstract.game3dobject", "./meshservice"], function (require, exports, abstract_game3dobject_1, meshservice_1) {
     "use strict";
     var Bonus = (function (_super) {
         __extends(Bonus, _super);
@@ -17,13 +17,13 @@ define(["require", "exports", "./abstract.game3dobject"], function (require, exp
         Bonus.prototype.initMesh = function () {
             switch (this.type) {
                 case Bonus.type.superMissile:
-                    this.mesh = bonusData.type[0].model.clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('bonus-missile');
                     break;
                 case Bonus.type.extraLife:
-                    this.mesh = bonusData.type[1].model.clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('bonus-life');
                     break;
                 default:
-                    this.mesh = bonusData.type[0].model.clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('bonus-missile');
                     console.log('Warning: Unknown bonus created! With type:', this.type);
                     break;
             }

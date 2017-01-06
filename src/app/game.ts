@@ -2,6 +2,8 @@ import { Statistics } from "./statistics";
 import { World } from "./world";
 import { Menu } from "./menu";
 import { SoundService } from "./soundservice";
+import { MaterialService } from "./materialservice";
+import { MeshService } from "./meshservice";
 
 export class Game {
 
@@ -37,6 +39,9 @@ export class Game {
             throw new Error("Game is a singleton. Use Game.getInstance() instead.");
         }
         Game.instance = this;
+
+        MaterialService.init();
+        MeshService.init();
 
         this.initSound();
 

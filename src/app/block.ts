@@ -1,5 +1,6 @@
 import { Game } from "./game";
 import { Game3dObject } from "./abstract.game3dobject";
+import { MeshService } from "./meshservice";
 
 export class Block extends Game3dObject {
 
@@ -20,7 +21,7 @@ export class Block extends Game3dObject {
     }
 
     public initMesh() {
-        let mesh = randFromArray(blockData.model).clone();
+        let mesh = MeshService.getRandomByName('block');
         mesh.castShadow = true;
         this.mesh = mesh;
     }

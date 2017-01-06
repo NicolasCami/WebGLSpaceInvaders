@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./abstract.game3dobject"], function (require, exports, abstract_game3dobject_1) {
+define(["require", "exports", "./abstract.game3dobject", "./meshservice"], function (require, exports, abstract_game3dobject_1, meshservice_1) {
     "use strict";
     var Block = (function (_super) {
         __extends(Block, _super);
@@ -15,7 +15,7 @@ define(["require", "exports", "./abstract.game3dobject"], function (require, exp
             this.init();
         }
         Block.prototype.initMesh = function () {
-            var mesh = randFromArray(blockData.model).clone();
+            var mesh = meshservice_1.MeshService.getRandomByName('block');
             mesh.castShadow = true;
             this.mesh = mesh;
         };

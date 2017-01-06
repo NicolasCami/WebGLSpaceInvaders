@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "./game", "./abstract.game3dobject", "./aliengroup", "./missile"], function (require, exports, game_1, abstract_game3dobject_1, aliengroup_1, missile_1) {
+define(["require", "exports", "./game", "./abstract.game3dobject", "./meshservice", "./aliengroup", "./missile"], function (require, exports, game_1, abstract_game3dobject_1, meshservice_1, aliengroup_1, missile_1) {
     "use strict";
     var Alien = (function (_super) {
         __extends(Alien, _super);
@@ -32,29 +32,29 @@ define(["require", "exports", "./game", "./abstract.game3dobject", "./aliengroup
         Alien.prototype.initMesh = function () {
             switch (this.type) {
                 case Alien.type.bottom:
-                    this.mesh = randFromArray(alienData.type[0].model1).clone();
-                    this.mesh2 = randFromArray(alienData.type[0].model2).clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('alien-bottom-1');
+                    this.mesh2 = meshservice_1.MeshService.getRandomByName('alien-bottom-2');
                     this.mesh2.visible = false;
                     this.score = 200;
                     this.explosionColor = 0x85b66c;
                     break;
                 case Alien.type.middle:
-                    this.mesh = randFromArray(alienData.type[1].model1).clone();
-                    this.mesh2 = randFromArray(alienData.type[1].model2).clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('alien-middle-1');
+                    this.mesh2 = meshservice_1.MeshService.getRandomByName('alien-middle-2');
                     this.mesh2.visible = false;
                     this.score = 150;
                     this.explosionColor = 0x3d6686;
                     break;
                 case Alien.type.top:
-                    this.mesh = randFromArray(alienData.type[2].model1).clone();
-                    this.mesh2 = randFromArray(alienData.type[2].model2).clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('alien-top-1');
+                    this.mesh2 = meshservice_1.MeshService.getRandomByName('alien-top-2');
                     this.mesh2.visible = false;
                     this.score = 100;
                     this.explosionColor = 0xaf72c5;
                     break;
                 case Alien.type.bonus:
-                    this.mesh = randFromArray(alienData.type[3].model1).clone();
-                    this.mesh2 = randFromArray(alienData.type[3].model2).clone();
+                    this.mesh = meshservice_1.MeshService.getRandomByName('alien-bonus-1');
+                    this.mesh2 = meshservice_1.MeshService.getRandomByName('alien-bonus-2');
                     this.mesh2.visible = false;
                     this.score = 500;
                     this.explosionColor = 0xaf72c5;

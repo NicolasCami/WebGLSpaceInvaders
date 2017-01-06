@@ -1,4 +1,5 @@
 import { Game3dObject } from "./abstract.game3dobject";
+import { MeshService } from "./meshservice";
 
 export class Bonus extends Game3dObject {
 
@@ -21,13 +22,13 @@ export class Bonus extends Game3dObject {
     public initMesh() {
         switch(this.type) {
             case Bonus.type.superMissile:
-                this.mesh = bonusData.type[0].model.clone();
+                this.mesh = MeshService.getRandomByName('bonus-missile');
                 break;
             case Bonus.type.extraLife:
-                this.mesh = bonusData.type[1].model.clone();
+                this.mesh = MeshService.getRandomByName('bonus-life');
                 break;
             default:
-                this.mesh = bonusData.type[0].model.clone();
+                this.mesh = MeshService.getRandomByName('bonus-missile');
                 console.log('Warning: Unknown bonus created! With type:', this.type);
                 break;
         }
