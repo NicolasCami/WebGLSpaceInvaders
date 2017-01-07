@@ -62,6 +62,12 @@ export class Game {
         document.body.appendChild( this.renderer.domElement );
         this.initScene();
 
+        THREEx.WindowResize.bind(this.renderer, this.camera);
+        THREEx.Screenshot.bindKey(this.renderer);
+        if(THREEx.FullScreen.available()) {
+            THREEx.FullScreen.bindKey();
+        }
+
         this.world = new World({
             x : 0.0,
             y : 6.0,

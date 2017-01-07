@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "/var/www/html/WebGLSpaceInvaders/typings/custom/threex.d.ts",
+    "raw": "file:typings/custom/threex.d.ts",
+    "typings": "/var/www/html/WebGLSpaceInvaders/typings/custom/threex.d.ts"
+  }
+}

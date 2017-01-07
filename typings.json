@@ -3,6 +3,7 @@
   "dependencies": {},
   "globalDependencies": {
     "jquery": "registry:dt/jquery#1.10.0+20161119044246",
-    "three": "registry:dt/three#0.0.0+20161208073813"
+    "three": "registry:dt/three#0.0.0+20161208073813",
+    "threex": "file:typings/custom/threex.d.ts"
   }
 }
