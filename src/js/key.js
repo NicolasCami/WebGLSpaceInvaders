@@ -37,6 +37,7 @@ define(["require", "exports", "./game", "./soundservice"], function (require, ex
                 }
                 if (event.keyCode == Key.keyCode.i) {
                     game_1.Game.getInstance().world.invinciblePad();
+                    game_1.Game.getInstance().invincibleGUI();
                 }
                 if (event.keyCode == Key.keyCode.h) {
                     game_1.Game.getInstance().help();

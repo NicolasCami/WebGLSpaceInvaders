@@ -177,10 +177,10 @@ define(["require", "exports", "./statistics", "./world", "./menu", "./soundservi
             /**
             INVINCIBLE GUI
             **/
-            /*function invincibleGUIEffect(){
-               $(".invincible div").fadeOut(500).delay(100).fadeIn(500);
-            }
-            setInterval('invincibleGUIEffect()',1300);*/
+            var invincibleGUIEffect = function () {
+                $(".invincible div").fadeOut(500).delay(100).fadeIn(500);
+            };
+            setInterval(invincibleGUIEffect, 1300);
             this.render();
         }
         Game.getInstance = function () {
@@ -300,6 +300,14 @@ define(["require", "exports", "./statistics", "./world", "./menu", "./soundservi
                 htmlString += '<i class="fa fa-rocket"></i> ';
             }
             $('.life').html(htmlString);
+        };
+        Game.prototype.invincibleGUI = function () {
+            if (this.world.invincible) {
+                $('.invincible').show();
+            }
+            else {
+                $('.invincible').hide();
+            }
         };
         return Game;
     }());

@@ -63,7 +63,7 @@ export class Key {
             }
             if(event.keyCode == Key.keyCode.i) {
                 Game.getInstance().world.invinciblePad();
-                //Game.getInstance().invincibleGUI();
+                Game.getInstance().invincibleGUI();
             }
             if(event.keyCode == Key.keyCode.h) {
                 Game.getInstance().help();

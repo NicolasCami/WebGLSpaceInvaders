@@ -94,10 +94,10 @@ export class Game {
         /**
         INVINCIBLE GUI
         **/
-        /*function invincibleGUIEffect(){
+        let invincibleGUIEffect = () => {
            $(".invincible div").fadeOut(500).delay(100).fadeIn(500); 
-        } 
-        setInterval('invincibleGUIEffect()',1300);*/      
+        };
+        setInterval(invincibleGUIEffect,1300);    
 
         this.render();
     }
@@ -366,6 +366,15 @@ export class Game {
             htmlString += '<i class="fa fa-rocket"></i> ';
         }
         $('.life').html(htmlString);
+    }
+
+    public invincibleGUI() {
+        if(this.world.invincible) {
+            $('.invincible').show();
+        }
+        else {
+            $('.invincible').hide();
+        }
     }
 
 }
